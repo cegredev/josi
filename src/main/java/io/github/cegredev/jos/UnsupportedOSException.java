@@ -13,10 +13,25 @@
  */
 package io.github.cegredev.jos;
 
+/**
+ * The exception thrown when the current OS is not supported.
+ *
+ * @author cegredev
+ */
 public class UnsupportedOSException extends RuntimeException {
 
+	/**
+	 * @param os The operating system that is not supported. Likely just the current one.
+	 */
 	public UnsupportedOSException(OS os) {
 		super("The operating system " + os + " is not supported!");
+	}
+
+	/**
+	 * Uses the current operating system as the OS value.
+	 */
+	public UnsupportedOSException() {
+		this(OS.get());
 	}
 
 }
