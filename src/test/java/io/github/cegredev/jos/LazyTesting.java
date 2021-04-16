@@ -19,9 +19,7 @@ public class LazyTesting {
 
 	@Test
 	public void testAny() {
-		System.out.print(OS.pick("win", "mac", "lin"));
-
-//		OperatingSystem os = null;
+		System.out.println(OS.get());
 	}
 
 }

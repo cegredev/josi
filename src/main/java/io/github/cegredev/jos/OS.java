@@ -14,6 +14,7 @@
 package io.github.cegredev.jos;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import static io.github.cegredev.jos.OS.Family.*;
 
@@ -25,10 +26,16 @@ import static io.github.cegredev.jos.OS.Family.*;
  */
 public enum OS {
 
-	WIN7(WINDOWS), WIN8(WINDOWS), WIN8_1(WINDOWS), WIN10(WINDOWS), MAC(Family.MAC), UBUNTU(LINUX), RED_HAT(LINUX);
+	// I am well aware that some of these windows version might be overkill, but they were included in this answer:
+	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from
+	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS), WIN_7(WINDOWS), WIN_8(WINDOWS),
+	WIN_8_1(WINDOWS), WIN_10(WINDOWS), WIN_ANY(WINDOWS),
+	MAC_ANY(Family.MAC),
+	LINUX_ANY(LINUX),
+	OTHER(Family.OTHER);
 
 	/**
-	 * The current operating system on the running pc.
+	 * The current operating system on the running PC.
 	 */
 	private static final OS CURRENT = determine(System.getProperty("os.name"));
 
@@ -50,8 +57,52 @@ public enum OS {
 	 * @return An operating system matching the given name.
 	 */
 	static OS determine(String osName) {
-		// TODO: Implement
-		return WIN10;
+		// TODO: Implement with more detail
+
+		// Locale.ROOT prevents funny locale stuff from happening
+		osName = osName.toLowerCase(Locale.ROOT).trim();
+
+		// Decide Windows version
+		if (osName.startsWith("win")) {
+			int lastSpace = osName.lastIndexOf(' ');
+
+			if (lastSpace > -1) {
+				switch (osName.substring(lastSpace + 1)) {
+					case "95":
+						return WIN_95;
+					case "98":
+						return WIN_98;
+					case "xp":
+						return WIN_XP;
+					case "vista":
+						return WIN_VISTA;
+					case "7":
+						return WIN_7;
+					case "8":
+						return WIN_8;
+					case "8.1":
+						return WIN_8_1;
+					case "10":
+						return WIN_10;
+					default:
+						break;
+				}
+			}
+
+			return WIN_ANY;
+		}
+
+		// Decide Mac version
+		if (osName.startsWith("mac")) {
+			return MAC_ANY;
+		}
+
+		// Decide Linux version
+		if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+			return LINUX_ANY;
+		}
+
+		return OTHER;
 	}
 
 	/**
@@ -185,7 +236,22 @@ public enum OS {
 	 */
 	enum Family {
 
-		WINDOWS, MAC, LINUX, OTHER
+		/**
+		 * The Windows operating system family.
+		 */
+		WINDOWS,
+		/**
+		 * The MacOS operating system family.
+		 */
+		MAC,
+		/**
+		 * Any Linux based operating system family.
+		 */
+		LINUX,
+		/**
+		 * Any other operating system family.
+		 */
+		OTHER
 
 	}
 }
