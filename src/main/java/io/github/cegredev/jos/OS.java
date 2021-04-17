@@ -26,8 +26,8 @@ import static io.github.cegredev.jos.OS.Family.*;
  */
 public enum OS {
 
-	// I am well aware that some of these windows version might be overkill, but they were included in this answer:
-	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from
+	// I am aware some of these windows version might be overkill, but they were included in this answer:
+	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from, so why not?
 	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS), WIN_7(WINDOWS), WIN_8(WINDOWS),
 	WIN_8_1(WINDOWS), WIN_10(WINDOWS), WIN_ANY(WINDOWS),
 	MAC_ANY(Family.MAC),
@@ -57,7 +57,7 @@ public enum OS {
 	 * @return An operating system matching the given name.
 	 */
 	static OS determine(String osName) {
-		// TODO: Implement with more detail
+		// TODO: Implement Mac and Linux in more detail
 
 		// Locale.ROOT prevents funny locale stuff from happening
 		osName = osName.toLowerCase(Locale.ROOT).trim();
@@ -131,7 +131,7 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the current operating system family or throws a {@link UnsupportedOSException}.
+	 * Picks the correct value for the current operating system family or throws an {@link UnsupportedOSException}.
 	 *
 	 * @param windows The value if the current OS family is {@link Family#WINDOWS}.
 	 * @param mac     The value if the current OS family is {@link Family#MAC}.
@@ -154,7 +154,21 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the current operating system family or throws a {@link UnsupportedOSException}.
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param windows  The value if the current OS family is {@link Family#WINDOWS}.
+	 * @param mac      The value if the current OS family is {@link Family#MAC}.
+	 * @param anyOther The value if the current OS is neither Windows or Mac.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickWMOr(T windows, T mac, T anyOther) {
+		return pick(windows, mac, anyOther, anyOther);
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family between Windows and Mac or throws an {@link
+	 * UnsupportedOSException}.
 	 *
 	 * @param windows The value if the current OS family is {@link Family#WINDOWS}.
 	 * @param mac     The value if the current OS family is {@link Family#MAC}.
@@ -162,7 +176,7 @@ public enum OS {
 	 * @return The appropriate value for the current operating system.
 	 * @throws UnsupportedOSException If the current OS is none of the above mentioned options.
 	 */
-	public static <T> T pick(T windows, T mac) {
+	public static <T> T pickWM(T windows, T mac) {
 		switch (CURRENT.getFamily()) {
 			case WINDOWS:
 				return windows;
@@ -171,6 +185,155 @@ public enum OS {
 			default:
 				throw new UnsupportedOSException();
 		}
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param windows  The value if the current OS family is {@link Family#WINDOWS}.
+	 * @param linux    The value if the current OS family is {@link Family#LINUX}.
+	 * @param anyOther The value if the current OS is neither Windows or Linux.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickWLOr(T windows, T linux, T anyOther) {
+		return pick(windows, anyOther, linux, anyOther);
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family between Windows and Linux or throws an {@link
+	 * UnsupportedOSException}.
+	 *
+	 * @param windows The value if the current OS family is {@link Family#WINDOWS}.
+	 * @param linux   The value if the current OS family is {@link Family#LINUX}.
+	 * @param <T>     The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 * @throws UnsupportedOSException If the current OS is none of the above mentioned options.
+	 */
+	public static <T> T pickWL(T windows, T linux) {
+		switch (CURRENT.getFamily()) {
+			case WINDOWS:
+				return windows;
+			case LINUX:
+				return linux;
+			default:
+				throw new UnsupportedOSException();
+		}
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param mac      The value if the current OS family is {@link Family#MAC}.
+	 * @param linux    The value if the current OS family is {@link Family#LINUX}.
+	 * @param anyOther The value if the current OS is neither Mac or Linux.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickMLOr(T mac, T linux, T anyOther) {
+		return pick(anyOther, mac, linux, anyOther);
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family between Mac and Linux or throws an {@link
+	 * UnsupportedOSException}.
+	 *
+	 * @param mac   The value if the current OS family is {@link Family#MAC}.
+	 * @param linux The value if the current OS family is {@link Family#LINUX}.
+	 * @param <T>   The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 * @throws UnsupportedOSException If the current OS is none of the above mentioned options.
+	 */
+	public static <T> T pickML(T mac, T linux) {
+		switch (CURRENT.getFamily()) {
+			case MAC:
+				return mac;
+			case LINUX:
+				return linux;
+			default:
+				throw new UnsupportedOSException();
+		}
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param windows  The value if the current OS family is {@link Family#WINDOWS}.
+	 * @param anyOther The value if the current OS is anything other than Windows.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickWOr(T windows, T anyOther) {
+		return pick(windows, anyOther, anyOther, anyOther);
+	}
+
+	/**
+	 * Returns the given value if the current OS family is Windows or else throws an {@link UnsupportedOSException}.
+	 *
+	 * @param windows The value if the current OS family is {@link Family#WINDOWS}.
+	 * @param <T>     The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 * @throws UnsupportedOSException If the current OS is not Windows.
+	 */
+	public static <T> T pickW(T windows) {
+		if (CURRENT.getFamily() == Family.WINDOWS)
+			return windows;
+
+		throw new UnsupportedOSException();
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param mac      The value if the current OS family is {@link Family#MAC}.
+	 * @param anyOther The value if the current OS is anything other than Mac.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickMOr(T mac, T anyOther) {
+		return pick(anyOther, mac, anyOther, anyOther);
+	}
+
+	/**
+	 * Returns the given value if the current OS family is Mac or else throws an {@link UnsupportedOSException}.
+	 *
+	 * @param mac The value if the current OS family is {@link Family#MAC}.
+	 * @param <T> The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 * @throws UnsupportedOSException If the current OS is not Mac.
+	 */
+	public static <T> T pickM(T mac) {
+		if (CURRENT.getFamily() == Family.MAC)
+			return mac;
+
+		throw new UnsupportedOSException();
+	}
+
+	/**
+	 * Picks the correct value for the current operating system family or a default one.
+	 *
+	 * @param linux    The value if the current OS family is {@link Family#LINUX}.
+	 * @param anyOther The value if the current OS is anything other than Linux.
+	 * @param <T>      The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 */
+	public static <T> T pickLOr(T linux, T anyOther) {
+		return pick(anyOther, anyOther, linux, anyOther);
+	}
+
+	/**
+	 * Returns the given value if the current OS family is Linux or else throws an {@link UnsupportedOSException}.
+	 *
+	 * @param linux The value if the current OS family is {@link Family#LINUX}.
+	 * @param <T>   The type of the value.
+	 * @return The appropriate value for the current operating system.
+	 * @throws UnsupportedOSException If the current OS is not Linux.
+	 */
+	public static <T> T pickL(T linux) {
+		if (CURRENT.getFamily() == LINUX)
+			return linux;
+
+		throw new UnsupportedOSException();
 	}
 
 	/**
