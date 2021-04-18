@@ -1,5 +1,5 @@
 # Java OS Independence
-Java OS Independence is a very simple and small library with the goal of making making decisions based on the current operating system at runtime easier.
+...or Josi for short, is a simple and lightweight Java library esigned to make making decisions based on the current operating system at runtime easier.
 
 ## Getting Started
 
@@ -12,6 +12,34 @@ Gradle:
 
 ```
 ```
+
+### How's it work?
+
+The [OS](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java) enum is the heart of the library. It contains the current operating system:
+```
+OS os = OS.current();
+```
+...which can be anything from `WIN_95` to `WIN_10` to any Mac version to a Linux based system. This is as specific as it gets for this library.
+
+The more useful information is the *family* of the operating system, i.e. Windows, Mac, Linux or Other. You can get it like this:
+```
+OS.Family family = os.getFamily();
+```
+...and the use it to execute code based on it:
+```
+switch (family) {
+	case WINDOWS:
+		// ...
+	case MAC:
+		// ...
+	case LINUX:
+		// ...
+	case OTHER:
+		// ...
+}
+```
+
+This is pretty much all you need to know, but I strongly encourage you to take a look at the other examples to explore some of the utility methods Josi has to offer!
 
 ### Examples
 
