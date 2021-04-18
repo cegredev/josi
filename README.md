@@ -1,5 +1,5 @@
 # Java OS Independence
-...or *Josi* for short, is a simple and lightweight Java library esigned to make making decisions based on the current operating system at runtime easier.
+...or *JOSI* for short, is a simple and lightweight Java library designed to make making decisions based on the current operating system at runtime easier.
 
 ## Getting Started
 
@@ -15,7 +15,7 @@ Gradle:
 
 ### How's it work?
 
-The [OS](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java) enum is the heart of the library and contains the current operating system, as well as a list of all that are available:
+The [OS](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java) enum is the heart of the library and contains the current operating system:
 
 ```java
 OS os = OS.current();
@@ -44,11 +44,11 @@ switch (family) {
 }
 ```
 
-This is pretty much all you need to know, but I strongly encourage you to take a look at the other examples below to explore some of the utility methods *Josi* has to offer!
+This is pretty much all you need to know, but I strongly encourage you to take a look at the other examples below to explore some of the utility methods *JOSI* has to offer!
 
 ### Examples
 
-Check whether a operating system is a specific one:
+Check whether an operating system is a specific one:
 
 ```java
 // Checks whether the OS is any of the given ones
@@ -131,16 +131,17 @@ switch (OS.current()) {
 ```
 
 ## Contributing
-Here are the things you can do:
 
- - Add a new operating system for the OS enum. I sadly can't test and add every operating system there is myself, so I have to rely on the community to grow this aspect further.
- - Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as we do not not want to bloat the libray.
+Here are some of the things you could do:
+
+ - Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit hof help is appreciated! If you want to know more, take a look at [this]() (work in progress) guide.
+ - Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
  - Test the code on your machine, i.e. check if it actually returns the correct operating system for you.
- - Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, we'll implement it!
+ - Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, I'll be glad to implement it!
 
 ## Support
 
-Feel free to open an issue or take a look at some examples!
+Feel free to open an issue, I'm happy to help!
 
 ## License
 
