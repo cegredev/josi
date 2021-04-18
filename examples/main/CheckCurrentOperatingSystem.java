@@ -28,9 +28,6 @@ public class CheckCurrentOperatingSystem {
 
 		// Checks whether the OS is part of the given families
 		boolean isUnixBased = OS.current().isFamily(OS.Family.MAC, OS.Family.LINUX);
-
-		// Note that these operations are not static, meaning they can be executed on any OS constant, not just the
-		// current one.
 	}
 
 	public static void enforceSpecificOperatingSystem() {
