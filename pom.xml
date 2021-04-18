@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.cegredev</groupId>
-    <artifactId>java-os-independence</artifactId>
+    <artifactId>josi</artifactId>
     <version>0.1.0</version>
 
-    <name>Java OS Independence</name>
+    <name>Josi</name>
     <packaging>jar</packaging>
     <description>A Java library designed to make making decisions based on the current operating system easier.
     </description>
-    <url>https://github.com/cegredev/java-os-independence</url>
+    <url>https://github.com/cegredev/josi</url>
 
     <licenses>
         <license>
@@ -22,9 +22,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/cegredev/java-os-independence.git</connection>
-        <developerConnection>scm:git:ssh://github.com:cegredev/java-os-independence.git</developerConnection>
-        <url>http://github.com/cegredev/java-os-independence</url>
+        <connection>scm:git:git://github.com/cegredev/josi.git</connection>
+        <developerConnection>scm:git:ssh://github.com:cegredev/josi.git</developerConnection>
+        <url>http://github.com/cegredev/josi</url>
     </scm>
 
     <properties>
@@ -100,17 +100,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
             </plugin>
         </plugins>
     </build>

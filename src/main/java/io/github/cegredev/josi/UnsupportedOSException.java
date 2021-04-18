@@ -11,15 +11,27 @@
  * KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.github.cegredev.jos;
+package io.github.cegredev.josi;
 
-import org.junit.jupiter.api.Test;
+/**
+ * The exception thrown when the current OS is not supported.
+ *
+ * @author cegredev
+ */
+public class UnsupportedOSException extends RuntimeException {
 
-public class LazyTesting {
+	/**
+	 * @param os The operating system that is not supported. Likely just the current one.
+	 */
+	public UnsupportedOSException(OS os) {
+		super("The operating system " + os + " is not supported!");
+	}
 
-	@Test
-	public void testAny() {
-		System.out.println(OS.get());
+	/**
+	 * Uses the current operating system as the OS value.
+	 */
+	public UnsupportedOSException() {
+		this(OS.current());
 	}
 
 }
