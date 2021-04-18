@@ -15,11 +15,15 @@ package io.github.cegredev.josi;
 
 import org.junit.jupiter.api.Test;
 
-public class LazyTesting {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OSFamilyTests {
 
 	@Test
-	public void testAny() {
-		System.out.println("Your operating system is: " + OS.current());
+	public void testRepresentativeOfSameFamily() {
+		for (OS.Family family : OS.Family.values())
+			assertSame(family, family.getRepresentative().getFamily(),
+					"OS.Family had a representative of the wrong family!");
 	}
 
 }

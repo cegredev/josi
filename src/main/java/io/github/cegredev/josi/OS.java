@@ -15,6 +15,7 @@ package io.github.cegredev.josi;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static io.github.cegredev.josi.OS.Family.*;
 
@@ -426,19 +427,36 @@ public enum OS {
 		/**
 		 * The Windows operating system family.
 		 */
-		WINDOWS,
+		WINDOWS(() -> WIN_10),
 		/**
 		 * The MacOS operating system family.
 		 */
-		MAC,
+		MAC(() -> MAC_UNKNOWN),
 		/**
 		 * Any Linux based operating system family.
 		 */
-		LINUX,
+		LINUX(() -> LINUX_UNKNOWN),
 		/**
 		 * Any other operating system family.
 		 */
-		OTHER
+		OTHER(() -> OS.OTHER);
 
+		/**
+		 * Supplies on OS representing a family. This has to be a supplier, because if you just passed in the OS to the
+		 * constructor you would create a circular definition, because each OS also references a family, meaning that
+		 * the value would always be null, because this constructor would be called before the actual OS value was set.
+		 */
+		private final Supplier<OS> representative;
+
+		Family(Supplier<OS> representative) {
+			this.representative = representative;
+		}
+
+		/**
+		 * @return An OS representing this family.
+		 */
+		public OS getRepresentative() {
+			return representative.get();
+		}
 	}
 }
