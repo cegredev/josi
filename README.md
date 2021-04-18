@@ -95,8 +95,8 @@ Execute code based on the current operating system:
 
 ```java
 // There are basically two ways to achieve this. The first and simplest is the following:
-// Since we often don't care about which exact version of an operating system we are running, we are just using
-// the *family* of the current OS, which can be one of the below values.
+// Since we often don't care about which exact version of an operating system we are running, we are
+// just using the family of the current OS, which can be one of the below values.
 switch (OS.current().getFamily()) {
 	case WINDOWS:
 		System.out.println("Windows!");
