@@ -29,9 +29,9 @@ public enum OS {
 	// I am aware some of these windows version might be overkill, but they were included in this answer:
 	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from, so why not?
 	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS), WIN_7(WINDOWS), WIN_8(WINDOWS),
-	WIN_8_1(WINDOWS), WIN_10(WINDOWS), WIN_ANY(WINDOWS),
-	MAC_ANY(Family.MAC),
-	LINUX_ANY(LINUX),
+	WIN_8_1(WINDOWS), WIN_10(WINDOWS), WIN_UNKNOWN(WINDOWS),
+	MAC_UNKNOWN(MAC),
+	LINUX_UNKNOWN(LINUX),
 	OTHER(Family.OTHER);
 
 	/**
@@ -52,6 +52,8 @@ public enum OS {
 	}
 
 	/**
+	 * Is package-private for tests.
+	 *
 	 * @param osName The name to determine the operating system from. Expects values in the format of {@code
 	 *               System.getProperty("os.name")}.
 	 * @return An operating system matching the given name.
@@ -89,17 +91,17 @@ public enum OS {
 				}
 			}
 
-			return WIN_ANY;
+			return WIN_UNKNOWN;
 		}
 
 		// Decide Mac version
 		if (osName.startsWith("mac")) {
-			return MAC_ANY;
+			return MAC_UNKNOWN;
 		}
 
 		// Decide Linux version
 		if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-			return LINUX_ANY;
+			return LINUX_UNKNOWN;
 		}
 
 		return OTHER;

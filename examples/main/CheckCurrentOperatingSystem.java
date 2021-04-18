@@ -32,7 +32,7 @@ public class CheckCurrentOperatingSystem {
 
 	public static void enforceSpecificOperatingSystem() {
 		// Throws an exception if the operating system is one of the given ones
-		OS.current().enforceNot(OS.WIN_95, OS.WIN_95, OS.WIN_VISTA);
+		OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_VISTA);
 
 		// Throws an exception if the operating system family is not part of the given ones
 		OS.current().enforceFamily(OS.Family.WINDOWS, OS.Family.MAC);
