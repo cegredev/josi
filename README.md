@@ -62,7 +62,7 @@ Enforce a specific operating system:
 
 ```java
 // Throws an exception if the operating system is one of the given ones
-OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_VISTA);
+OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_XP);
 
 // Throws an exception if the operating system family is not part of the given ones
 OS.current().enforceFamily(OS.Family.WINDOWS, OS.Family.MAC);
@@ -134,10 +134,13 @@ switch (OS.current()) {
 
 Here are some of the things you could do:
 
- - Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit hof help is appreciated! If you want to know more, take a look at [this]() (work in progress) guide.
- - Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
- - Test the code on your machine, i.e. check if it actually returns the correct operating system for you.
- - Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, I'll be glad to implement it!
+Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit of help is appreciated! If you want to know more, take a look at [this guide]() (work in progress!).
+
+Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
+
+Test the code on your machine, i.e. check if it actually returns the correct operating system for you.
+
+Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, I'll be glad to implement it!
 
 ## Support
 
@@ -145,4 +148,6 @@ Feel free to open an issue, I'm happy to help!
 
 ## License
 
-This project is licensed under the [Apache 2.0 license](https://github.com/cegredev/java-os-independence/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/cegredev/java-os-independence/blob/main/LICENSE), but if you don't credit me anywhere in your project, that's fine.
+
+I do not believe this library is a unique or northworthy accomplishment, but only attempts to standardize something people did on their own for a long time anyways and therefore don't feel like I deserve any more credit than owning the repository. I want this project to be a team effort, which is why I instead ask you to contribute any changes you make back to this repo, as long as they are universally usable and don't bloat the library (as mentioned before, like a new OS for example).
