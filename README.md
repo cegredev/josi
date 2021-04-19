@@ -62,7 +62,7 @@ Enforce a specific operating system:
 
 ```java
 // Throws an exception if the operating system is one of the given ones
-OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_VISTA);
+OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_XP);
 
 // Throws an exception if the operating system family is not part of the given ones
 OS.current().enforceFamily(OS.Family.WINDOWS, OS.Family.MAC);
@@ -134,10 +134,13 @@ switch (OS.current()) {
 
 Here are some of the things you could do:
 
- - Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit hof help is appreciated! If you want to know more, take a look at [this]() (work in progress) guide.
- - Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
- - Test the code on your machine, i.e. check if it actually returns the correct operating system for you.
- - Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, I'll be glad to implement it!
+Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit hof help is appreciated! If you want to know more, take a look at [this guide]() (work in progress!).
+
+Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
+
+Test the code on your machine, i.e. check if it actually returns the correct operating system for you.
+
+Make suggestions, i.e. if you want to contribute larger changes to the project, create a pull requets or issue (beforehand) and if it fits, I'll be glad to implement it!
 
 ## Support
 
