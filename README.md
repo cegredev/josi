@@ -1,4 +1,5 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.cegredev/josi.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.cegredev%22%20AND%20a:%22josi%22)
+[![javadoc](https://javadoc.io/badge2/io.github.cegredev/josi/javadoc.svg)](https://javadoc.io/doc/io.github.cegredev/josi)
 # Java OS Independence
 ...or *JOSI* for short, is a simple and lightweight Java library designed to make making decisions based on the current operating system at runtime easier.
 
@@ -24,7 +25,7 @@ Or download from [Maven Central](https://search.maven.org/artifact/io.github.ceg
 
 ### How's it work?
 
-The [OS](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java) enum is the heart of the library and contains the current operating system:
+The [OS](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.html) enum is the heart of the library and contains the current operating system:
 
 ```java
 OS os = OS.current();
@@ -32,7 +33,7 @@ OS os = OS.current();
 
 ...which can be anything from `WIN_95` to `WIN_10` to any Mac version to a Linux based system. This is as specific as it gets for this library.
 
-The more useful information is the *family* of the operating system, i.e. `Windows`, `Mac`, `Linux` or `Other`. You can get it like this:
+The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `Windows`, `Mac`, `Linux` or `Other`. You can get it like this:
 
 ```java
 OS.Family family = os.getFamily();
@@ -53,7 +54,7 @@ switch (family) {
 }
 ```
 
-This is pretty much all you need to know, but I strongly encourage you to take a look at the other examples below to explore some of the utility methods *JOSI* has to offer!
+This is pretty much all you need to know, but I strongly encourage you to take a look at the other examples below and the [documentation](https://javadoc.io/doc/io.github.cegredev/josi) to explore some of the utility methods *JOSI* has to offer!
 
 ### Examples
 
@@ -143,7 +144,7 @@ switch (OS.current()) {
 
 Here are some of the things you could do:
 
-Add a new operating system for the OS enum: If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit of help is appreciated! If you want to know more, take a look at [this guide]() (work in progress!).
+Add a new operating system for the [OS enum](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java): If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit of help is appreciated! If you want to know more, take a look at [this guide]() (work in progress!).
 
 Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
 
@@ -153,7 +154,7 @@ Make suggestions, i.e. if you want to contribute larger changes to the project, 
 
 ## Support
 
-Feel free to open an issue, I'm happy to help!
+Take a look at the [documentation](https://javadoc.io/doc/io.github.cegredev/josi) or feel free to open an issue, I'm happy to help!
 
 ## License
 
