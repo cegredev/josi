@@ -1,3 +1,4 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.cegredev/josi.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.cegredev%22%20AND%20a:%22josi%22)
 # Java OS Independence
 ...or *JOSI* for short, is a simple and lightweight Java library designed to make making decisions based on the current operating system at runtime easier.
 
@@ -5,13 +6,21 @@
 
 Maven:
 
-```
+```xml
+<dependency>
+  <groupId>io.github.cegredev</groupId>
+  <artifactId>josi</artifactId>
+  <version>0.1.0</version>
+</dependency>
 ```
 
 Gradle:
 
+```gradle
+implementation 'io.github.cegredev:josi:0.1.0'
 ```
-```
+
+Or download from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi/0.1.0/jar) directly.
 
 ### How's it work?
 
