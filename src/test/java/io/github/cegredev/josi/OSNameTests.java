@@ -31,24 +31,24 @@ public class OSNameTests {
 
 	private static final String SEPARATOR = ":";
 
+	// The problem with this is, that it relies on the naming of all the OSs in the OS enum to check the result of
+	// the determine method. So if any of those names get changed, you'll have to modify them here as well
 	private static final String[] windowsNames = {"UNKNOWN:Windows fj12l3j123", "95:Windows 95", "98:Windows 98",
 			"XP:Windows XP", "VISTA:Windows Vista", "7:Windows 7", "8:Windows 8", "8_1:Windows 8.1", "10:Windows 10"};
 
-	private static final String[] macNames = {"UNKNOWN:Mac"};
+	private static final String[] macNames = {":Mac"};
 
-	private static final String[] linuxNames = {"LINUX_UNKNOWN:Linux"};
+	private static final String[] linuxNames = {"LINUX:Linux"};
 
 	private static final String[] otherNames = {"OTHER:an_os_that_does_not_exist"};
 
 	@Test
 	public void testWindowsDetermine() {
-		// The problem with this is, that it relies on the naming of all the OSs in the OS enum to check the result of
-		// the method. So if any of these names get changed, you'll at least have to modify the array above.
 		for (String os : windowsNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals("WIN_" + split[0], OS.determine(split[1]).toString(), "Did not determine" +
-					"correct OS for name.");
+			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1]),
+					"Did not determine correct OS for name.");
 		}
 	}
 
@@ -57,8 +57,8 @@ public class OSNameTests {
 		for (String os : macNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals("MAC_" + split[0], OS.determine(split[1]).toString(), "Did not determine" +
-					"correct OS for name.");
+			assertEquals(OS.valueOf("MAC" + split[0]), OS.determine(split[1]),
+					"Did not determine correct OS for name.");
 		}
 	}
 
@@ -67,7 +67,7 @@ public class OSNameTests {
 		for (String os : linuxNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals(split[0], OS.determine(split[1]).toString(), "Did not determine correct OS for name.");
+			assertEquals(OS.valueOf(split[0]), OS.determine(split[1]), "Did not determine correct OS for name.");
 		}
 	}
 

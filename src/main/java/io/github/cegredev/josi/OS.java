@@ -30,8 +30,8 @@ import java.util.function.Supplier;
 import static io.github.cegredev.josi.OS.Family.*;
 
 /**
- * Contains a list of various operating system families and their versions, as well as the OS used on the current PC and
- * methods to help deal with different operating systems.
+ * A list of various operating systems, each belonging to a {@link Family}. Contains the current operating system and
+ * utility methods to help deal with different operating systems.
  *
  * @author cegredev
  */
@@ -40,13 +40,26 @@ public enum OS {
 	// I am aware some of these windows version might be overkill, but they were included in this answer:
 	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from, so why not?
 	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS), WIN_7(WINDOWS), WIN_8(WINDOWS),
-	WIN_8_1(WINDOWS), WIN_10(WINDOWS), WIN_UNKNOWN(WINDOWS),
-	MAC_UNKNOWN(MAC),
-	LINUX_UNKNOWN(LINUX),
+	WIN_8_1(WINDOWS), WIN_10(WINDOWS),
+	/**
+	 * An unknown or at least unrecognizable Windows based operating system.
+	 */
+	WIN_UNKNOWN(WINDOWS),
+	/**
+	 * Any Mac based operating system.
+	 */
+	MAC(Family.MAC),
+	/**
+	 * Any Linux based operating system.
+	 */
+	LINUX(Family.LINUX),
+	/**
+	 * An operating system that cannot be classified.
+	 */
 	OTHER(Family.OTHER);
 
 	/**
-	 * The current operating system on the running PC.
+	 * The operating system running on the current PC.
 	 */
 	private static final OS CURRENT = determine(System.getProperty("os.name"));
 
@@ -63,24 +76,24 @@ public enum OS {
 	}
 
 	/**
-	 * Is package-private for tests.
+	 * Tries to recognize and map an operating system to the given name. Is package-private for tests.
 	 *
-	 * @param osName The name to determine the operating system from. Expects values in the format of {@code
-	 *               System.getProperty("os.name")}.
-	 * @return An operating system matching the given name.
+	 * @param name The name to determine the operating system from. Expects values in the format of {@code
+	 *             System.getProperty("os.name")}.
+	 * @return An operating system matching the given name or other if the name can not be recognized.
 	 */
-	static OS determine(String osName) {
+	static OS determine(String name) {
 		// TODO: Implement Mac and Linux in more detail
 
 		// Locale.ROOT prevents funny locale stuff from happening
-		osName = osName.toLowerCase(Locale.ROOT).trim();
+		name = name.toLowerCase(Locale.ROOT).trim();
 
 		// Decide Windows version
-		if (osName.startsWith("win")) {
-			int lastSpace = osName.lastIndexOf(' ');
+		if (name.startsWith("win")) {
+			int lastSpace = name.lastIndexOf(' ');
 
 			if (lastSpace > -1) {
-				switch (osName.substring(lastSpace + 1)) {
+				switch (name.substring(lastSpace + 1)) {
 					case "95":
 						return WIN_95;
 					case "98":
@@ -106,13 +119,13 @@ public enum OS {
 		}
 
 		// Decide Mac version
-		if (osName.startsWith("mac")) {
-			return MAC_UNKNOWN;
+		if (name.startsWith("mac")) {
+			return MAC;
 		}
 
 		// Decide Linux version
-		if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-			return LINUX_UNKNOWN;
+		if (name.contains("nix") || name.contains("nux") || name.contains("aix")) {
+			return LINUX;
 		}
 
 		return OTHER;
@@ -126,14 +139,14 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family.
+	 * Picks one of the given values based on the {@link Family} of this operating system.
 	 *
 	 * @param windows The value if the OS family is {@link Family#WINDOWS}.
 	 * @param mac     The value if the OS family is {@link Family#MAC}.
 	 * @param linux   The value if the OS family is {@link Family#LINUX}.
 	 * @param other   The value if the OS family is {@link Family#OTHER}.
 	 * @param <T>     The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pick(T windows, T mac, T linux, T other) {
 		switch (getFamily()) {
@@ -151,14 +164,15 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or throws an {@link UnsupportedOSException}.
+	 * Picks one of the given values based on the {@link Family} of this operating system or throws an {@link
+	 * UnsupportedOSException} if there is no value to represent it.
 	 *
 	 * @param windows The value if the OS family is {@link Family#WINDOWS}.
 	 * @param mac     The value if the OS family is {@link Family#MAC}.
 	 * @param linux   The value if the OS family is {@link Family#LINUX}.
 	 * @param <T>     The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is none of the above mentioned options.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is none of the above mentioned options.
 	 */
 	public <T> T pick(T windows, T mac, T linux) {
 		switch (getFamily()) {
@@ -174,27 +188,27 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Picks one of the given values based on the {@link Family} of this operating system or a default one.
 	 *
 	 * @param windows  The value if the OS family is {@link Family#WINDOWS}.
 	 * @param mac      The value if the OS family is {@link Family#MAC}.
 	 * @param anyOther The value if the OS is neither Windows or Mac.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickWinMacAny(T windows, T mac, T anyOther) {
 		return pick(windows, mac, anyOther, anyOther);
 	}
 
 	/**
-	 * Picks the correct value for the operating system family between Windows and Mac or throws an {@link
-	 * UnsupportedOSException}.
+	 * Picks one of the given values based on the {@link Family} of this operating system or throws an {@link
+	 * UnsupportedOSException} if there is no value to represent it.
 	 *
 	 * @param windows The value if the OS family is {@link Family#WINDOWS}.
 	 * @param mac     The value if the OS family is {@link Family#MAC}.
 	 * @param <T>     The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is none of the above mentioned options.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is none of the above mentioned options.
 	 */
 	public <T> T pickWinMac(T windows, T mac) {
 		switch (getFamily()) {
@@ -208,27 +222,27 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Picks one of the given values based on the {@link Family} of this operating system or a default one.
 	 *
 	 * @param windows  The value if the OS family is {@link Family#WINDOWS}.
 	 * @param linux    The value if the OS family is {@link Family#LINUX}.
 	 * @param anyOther The value if the OS is neither Windows or Linux.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickWinLinuxAny(T windows, T linux, T anyOther) {
 		return pick(windows, anyOther, linux, anyOther);
 	}
 
 	/**
-	 * Picks the correct value for the operating system family between Windows and Linux or throws an {@link
-	 * UnsupportedOSException}.
+	 * Picks one of the given values based on the {@link Family} of this operating system or throws an {@link
+	 * UnsupportedOSException} if there is no value to represent it.
 	 *
 	 * @param windows The value if the OS family is {@link Family#WINDOWS}.
 	 * @param linux   The value if the OS family is {@link Family#LINUX}.
 	 * @param <T>     The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is none of the above mentioned options.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is none of the above mentioned options.
 	 */
 	public <T> T pickWinLinux(T windows, T linux) {
 		switch (getFamily()) {
@@ -242,27 +256,27 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Picks one of the given values based on the {@link Family} of this operating system or a default one.
 	 *
 	 * @param mac      The value if the OS family is {@link Family#MAC}.
 	 * @param linux    The value if the OS family is {@link Family#LINUX}.
 	 * @param anyOther The value if the OS is neither Mac or Linux.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickMacLinuxAny(T mac, T linux, T anyOther) {
 		return pick(anyOther, mac, linux, anyOther);
 	}
 
 	/**
-	 * Picks the correct value for the operating system family between Mac and Linux or throws an {@link
-	 * UnsupportedOSException}.
+	 * Picks one of the given values based on the {@link Family} of this operating system or throws an {@link
+	 * UnsupportedOSException} if there is no value to represent it.
 	 *
 	 * @param mac   The value if the OS family is {@link Family#MAC}.
 	 * @param linux The value if the OS family is {@link Family#LINUX}.
 	 * @param <T>   The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is none of the above mentioned options.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is none of the above mentioned options.
 	 */
 	public <T> T pickMacLinux(T mac, T linux) {
 		switch (getFamily()) {
@@ -276,24 +290,25 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Returns the given value if the {@link Family} of this operating system is Windows, or a default one.
 	 *
 	 * @param windows  The value if the OS family is {@link Family#WINDOWS}.
 	 * @param anyOther The value if the OS is anything other than Windows.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickWindowsAny(T windows, T anyOther) {
 		return pick(windows, anyOther, anyOther, anyOther);
 	}
 
 	/**
-	 * Returns the given value if the OS family is Windows or else throws an {@link UnsupportedOSException}.
+	 * Returns the given value if the {@link Family} of this OS is Windows or else throws an {@link
+	 * UnsupportedOSException}.
 	 *
 	 * @param windows The value if the OS family is {@link Family#WINDOWS}.
 	 * @param <T>     The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is not Windows.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is not Windows.
 	 */
 	public <T> T pickWindows(T windows) {
 		if (getFamily() == Family.WINDOWS)
@@ -303,24 +318,25 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Returns the given value if the {@link Family} of this operating system is Mac, or a default one.
 	 *
 	 * @param mac      The value if the OS family is {@link Family#MAC}.
 	 * @param anyOther The value if the OS is anything other than Mac.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickMacAny(T mac, T anyOther) {
 		return pick(anyOther, mac, anyOther, anyOther);
 	}
 
 	/**
-	 * Returns the given value if the OS family is Mac or else throws an {@link UnsupportedOSException}.
+	 * Returns the given value if the {@link Family} of this OS is Mac or else throws an {@link
+	 * UnsupportedOSException}.
 	 *
 	 * @param mac The value if the OS family is {@link Family#MAC}.
 	 * @param <T> The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is not Mac.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is not Mac.
 	 */
 	public <T> T pickMac(T mac) {
 		if (getFamily() == Family.MAC)
@@ -330,27 +346,28 @@ public enum OS {
 	}
 
 	/**
-	 * Picks the correct value for the operating system family or a default one.
+	 * Returns the given value if the {@link Family} of this operating system is Linux, or a default one.
 	 *
 	 * @param linux    The value if the OS family is {@link Family#LINUX}.
 	 * @param anyOther The value if the OS is anything other than Linux.
 	 * @param <T>      The type of the value.
-	 * @return The appropriate value for the operating system.
+	 * @return The value representing this operating system.
 	 */
 	public <T> T pickLinuxAny(T linux, T anyOther) {
 		return pick(anyOther, anyOther, linux, anyOther);
 	}
 
 	/**
-	 * Returns the given value if the OS family is Linux or else throws an {@link UnsupportedOSException}.
+	 * Returns the given value if the {@link Family} of this OS is Linux or else throws an {@link
+	 * UnsupportedOSException}.
 	 *
 	 * @param linux The value if the OS family is {@link Family#LINUX}.
 	 * @param <T>   The type of the value.
-	 * @return The appropriate value for the operating system.
-	 * @throws UnsupportedOSException If the OS is not Linux.
+	 * @return The value representing this operating system.
+	 * @throws UnsupportedOSException If this operating system is not Linux.
 	 */
 	public <T> T pickLinux(T linux) {
-		if (getFamily() == LINUX)
+		if (getFamily() == Family.LINUX)
 			return linux;
 
 		throw new UnsupportedOSException();
@@ -359,17 +376,17 @@ public enum OS {
 	/**
 	 * Checks if this OS is part of the given families.
 	 *
-	 * @param families An array of families this OS's family will be checked against.
-	 * @return If this OS is part of the given families.
+	 * @param families An array of families this OS's family has to be part of.
+	 * @return If this OS's family is part of the given families.
 	 */
 	public boolean isFamily(Family... families) {
 		return Arrays.asList(families).contains(getFamily());
 	}
 
 	/**
-	 * Throws an exception if this operating system is part of the given families.
+	 * Throws an {@link UnsupportedOSException} if this OS's family is part of the given families.
 	 *
-	 * @param families An array of families that this OS is not allowed to be part of.
+	 * @param families An array of families that this OS's family is not allowed to be part of.
 	 * @throws UnsupportedOSException If the this operating system's family is part of the given array.
 	 */
 	public void enforceNotFamily(Family... families) {
@@ -378,10 +395,10 @@ public enum OS {
 	}
 
 	/**
-	 * Throws an exception if this operating system is not part of the given families.
+	 * Throws an {@link UnsupportedOSException} if this OS is not part of the given families.
 	 *
-	 * @param families An array of families that this OS has t be part of.
-	 * @throws UnsupportedOSException If the this operating system's family is not part of the given array.
+	 * @param families An array of families that this OS's family has to be part of.
+	 * @throws UnsupportedOSException If this operating system's family is not part of the given array.
 	 */
 	public void enforceFamily(Family... families) {
 		if (!isFamily(families))
@@ -389,9 +406,9 @@ public enum OS {
 	}
 
 	/**
-	 * Checks if this OS is part of the given operating systems.
+	 * Checks if this OS is part of the given array.
 	 *
-	 * @param operatingSystems An array of OSs this OS will be checked against.
+	 * @param operatingSystems An array of operating systems this OS has to be part of.
 	 * @return If this OS is part of the given array.
 	 */
 	public boolean is(OS... operatingSystems) {
@@ -399,7 +416,7 @@ public enum OS {
 	}
 
 	/**
-	 * Throws an exception if this operating system is part of the given array.
+	 * Throws an {@link UnsupportedOSException} if this operating system is part of the given array.
 	 *
 	 * @param operatingSystems An array of operating systems that this OS is not allowed to be part of.
 	 * @throws UnsupportedOSException If this operating system is part of the given array.
@@ -410,7 +427,7 @@ public enum OS {
 	}
 
 	/**
-	 * Throws an exception if this operating system is not part of the given array.
+	 * Throws an {@link UnsupportedOSException} if this operating system is not part of the given array.
 	 *
 	 * @param operatingSystems An array of operating systems that this OS has to be part of.
 	 * @throws UnsupportedOSException If this operating system is not part of the given array.
@@ -421,7 +438,7 @@ public enum OS {
 	}
 
 	/**
-	 * @return The family this OS is a part of.
+	 * @return The family this OS belongs to.
 	 */
 	public Family getFamily() {
 		return family;
@@ -441,20 +458,21 @@ public enum OS {
 		/**
 		 * The MacOS operating system family.
 		 */
-		MAC(() -> MAC_UNKNOWN),
+		MAC(() -> OS.MAC),
 		/**
 		 * Any Linux based operating system family.
 		 */
-		LINUX(() -> LINUX_UNKNOWN),
+		LINUX(() -> OS.LINUX),
 		/**
 		 * Any other operating system family.
 		 */
 		OTHER(() -> OS.OTHER);
 
 		/**
-		 * Supplies on OS representing a family. This has to be a supplier, because if you just passed in the OS to the
-		 * constructor you would create a circular definition, because each OS also references a family, meaning that
-		 * the value would always be null, because this constructor would be called before the actual OS value was set.
+		 * Supplies an OS representing the family. This has to be a supplier, because if you just passed in the OS to
+		 * the constructor you would create a circular definition, because each OS also references a family at
+		 * construction, meaning that the value would always be null, because this constructor would be called before
+		 * the actual OS value was set.
 		 */
 		private final Supplier<OS> representative;
 
