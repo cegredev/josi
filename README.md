@@ -11,14 +11,16 @@ Maven:
 <dependency>
   <groupId>io.github.cegredev</groupId>
   <artifactId>josi</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```gradle
-implementation 'io.github.cegredev:josi:0.1.0'
+dependencies {
+  implementation 'io.github.cegredev:josi:0.2.0'
+}
 ```
 
 Or download from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi/0.1.0/jar) directly.
