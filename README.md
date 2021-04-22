@@ -23,7 +23,7 @@ dependencies {
 }
 ```
 
-Or download from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi/0.1.0/jar) directly.
+Or download the jars directly from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi/0.1.0/jar) directly.
 
 ### How's it work?
 
@@ -33,9 +33,9 @@ The [OS](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegrede
 OS os = OS.current();
 ```
 
-...which can be anything from `WIN_95` to `WIN_10` to any Mac version to a Linux based system. This is as specific as it gets for this library.
+...which can be anything from `WIN_95` to `WIN_10` to `MAC` to `LINUX` (the goal is to add more detailed Mac and Linux versions with help of the open source community). This is as specific as it gets for this library.
 
-The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `Windows`, `Mac`, `Linux` or `Other`. You can get it like this:
+The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `WINDOWS`, `NAC`, `LINUX` or `OTHER`. You can get it like this:
 
 ```java
 OS.Family family = os.getFamily();
