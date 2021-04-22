@@ -23,11 +23,11 @@ dependencies {
 }
 ```
 
-Or download the jars directly from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi/0.1.0/jar) directly.
+Or download the jars directly from [Maven Central](https://search.maven.org/artifact/io.github.cegredev/josi).
 
 ### How's it work?
 
-The [OS](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.html) enum is the heart of the library and contains the current operating system:
+The [OS](https://javadoc.io/page/io.github.cegredev/josi/latest/io/github/cegredev/josi/OS.html) enum is the heart of the library and contains the current operating system:
 
 ```java
 OS os = OS.current();
@@ -35,7 +35,7 @@ OS os = OS.current();
 
 ...which can be anything from `WIN_95` to `WIN_10` to `MAC` to `LINUX` (the goal is to add more detailed Mac and Linux versions with help of the open source community). This is as specific as it gets for this library.
 
-The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/0.1.0/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `WINDOWS`, `NAC`, `LINUX` or `OTHER`. You can get it like this:
+The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/latest/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `WINDOWS`, `NAC`, `LINUX` or `OTHER`. You can get it like this:
 
 ```java
 OS.Family family = os.getFamily();
