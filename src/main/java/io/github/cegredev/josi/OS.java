@@ -45,10 +45,19 @@ public enum OS {
 	 * An unknown or at least unrecognizable Windows based operating system.
 	 */
 	WIN_UNKNOWN(WINDOWS),
+
+	// Specific versions of macOS. Originally named MAC OS X, it was renamed to macOS starting
+	// with Sierra.
+	MAC_OSX_CHEETAH(MAC), MAC_OSX_PUMA(MAC), MAC_OSX_JAGUAR(MAC),
+	MAC_OSX_PANTHER(MAC), MAC_OSX_TIGER(MAC), MAC_OSX_LEOPARD(MAC),
+	MAC_OSX_SNOW_LEOPARD(MAC), MAC_OSX_LION(MAC), MAC_OSX_MOUNTAIN_LION(MAC),
+	MAC_OSX_MAVERICKS(MAC), MAC_OSX_YOSEMITE(MAC), MAC_OSX_EL_CAPITAN(MAC),
+	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC),
+	MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
 	/**
 	 * Any Mac based operating system.
 	 */
-	MAC(Family.MAC),
+	MAC_UNKNOWN(MAC),
 	/**
 	 * Any Linux based operating system.
 	 */
@@ -61,7 +70,7 @@ public enum OS {
 	/**
 	 * The operating system running on the current PC.
 	 */
-	private static final OS CURRENT = determine(System.getProperty("os.name"));
+	private static final OS CURRENT = determine(System.getProperty("os.name"), System.getProperty("os.version"));
 
 	/**
 	 * The family the operating system belongs to.
@@ -80,10 +89,12 @@ public enum OS {
 	 *
 	 * @param name The name to determine the operating system from. Expects values in the format of {@code
 	 *             System.getProperty("os.name")}.
+	 * @param version The version to determine the operating system from. Expects values in the format of {@code
+	 * 	              System.getProperty("os.version")}.
 	 * @return An operating system matching the given name or other if the name can not be recognized.
 	 */
-	static OS determine(String name) {
-		// TODO: Implement Mac and Linux in more detail
+	static OS determine(String name, String version) {
+		// TODO: Implement Linux in more detail
 
 		// Locale.ROOT prevents funny locale stuff from happening
 		name = name.toLowerCase(Locale.ROOT).trim();
@@ -120,7 +131,57 @@ public enum OS {
 
 		// Decide Mac version
 		if (name.startsWith("mac")) {
-			return MAC;
+			String[] versionSplit = version.split("\\.");
+
+			if (versionSplit.length < 2) {
+				// If we only have the major version, we can't decide
+				return MAC_UNKNOWN;
+			}
+
+			String majorMinor = versionSplit[0] + "." + versionSplit[1];
+
+			switch (majorMinor) {
+				case "10.0":
+					return MAC_OSX_CHEETAH;
+				case "10.1":
+					return MAC_OSX_PUMA;
+				case "10.2":
+					return MAC_OSX_JAGUAR;
+				case "10.3":
+					return MAC_OSX_PANTHER;
+				case "10.4":
+					return MAC_OSX_TIGER;
+				case "10.5":
+					return MAC_OSX_LEOPARD;
+				case "10.6":
+					return MAC_OSX_SNOW_LEOPARD;
+				case "10.7":
+					return MAC_OSX_LION;
+				case "10.8":
+					return MAC_OSX_MOUNTAIN_LION;
+				case "10.9":
+					return MAC_OSX_MAVERICKS;
+				case "10.10":
+					return MAC_OSX_YOSEMITE;
+				case "10.11":
+					return MAC_OSX_EL_CAPITAN;
+				case "10.12":
+					return MAC_OS_SIERRA;
+				case "10.13":
+					return MAC_OS_HIGH_SIERRA;
+				case "10.14":
+					return MAC_OS_MOJAVE;
+				case "10.15":
+					return MAC_OS_CATALINA;
+				case "10.16":
+					// Even though Big Sur is macOS version 11.x,
+					// the os.version system property returns 10.16
+					return MAC_OS_BIG_SUR;
+				default:
+					break;
+			}
+
+			return MAC_UNKNOWN;
 		}
 
 		// Decide Linux version
@@ -458,7 +519,7 @@ public enum OS {
 		/**
 		 * The MacOS operating system family.
 		 */
-		MAC(() -> OS.MAC),
+		MAC(() -> OS.MAC_OS_BIG_SUR),
 		/**
 		 * Any Linux based operating system family.
 		 */

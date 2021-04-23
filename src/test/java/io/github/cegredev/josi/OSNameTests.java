@@ -36,7 +36,11 @@ public class OSNameTests {
 	private static final String[] windowsNames = {"UNKNOWN:Windows fj12l3j123", "95:Windows 95", "98:Windows 98",
 			"XP:Windows XP", "VISTA:Windows Vista", "7:Windows 7", "8:Windows 8", "8_1:Windows 8.1", "10:Windows 10"};
 
-	private static final String[] macNames = {":Mac"};
+	private static final String[] macNames = {"UNKNOWN:Mac: ", "UNKNOWN:Mac:10", "OSX_CHEETAH:Mac OS X:10.0",
+			"OSX_PUMA:Mac OS X:10.1.1", "OSX_JAGUAR:Mac:10.2.4", "OSX_PANTHER:Mac:10.3", "OSX_TIGER:Mac:10.4",
+			"OSX_LEOPARD:Mac:10.5.1", "OSX_SNOW_LEOPARD:Mac:10.6", "OSX_LION:Mac:10.7", "OSX_MOUNTAIN_LION:Mac:10.8",
+			"OSX_MAVERICKS:Mac:10.9", "OSX_YOSEMITE:Mac:10.10", "OSX_EL_CAPITAN:Mac:10.11", "OS_SIERRA:Mac:10.12",
+			"OS_HIGH_SIERRA:Mac:10.13", "OS_MOJAVE:Mac:10.14.", "OS_CATALINA:Mac:10.15", "OS_BIG_SUR:Mac:10.16"};
 
 	private static final String[] linuxNames = {"LINUX:Linux"};
 
@@ -47,7 +51,7 @@ public class OSNameTests {
 		for (String os : windowsNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1]),
+			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1], ""),
 					"Did not determine correct OS for name.");
 		}
 	}
@@ -57,7 +61,7 @@ public class OSNameTests {
 		for (String os : macNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals(OS.valueOf("MAC" + split[0]), OS.determine(split[1]),
+			assertEquals(OS.valueOf("MAC_" + split[0]), OS.determine(split[1], split[2]),
 					"Did not determine correct OS for name.");
 		}
 	}
@@ -67,7 +71,8 @@ public class OSNameTests {
 		for (String os : linuxNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals(OS.valueOf(split[0]), OS.determine(split[1]), "Did not determine correct OS for name.");
+			assertEquals(OS.valueOf(split[0]), OS.determine(split[1], ""),
+					"Did not determine correct OS for name.");
 		}
 	}
 
@@ -76,7 +81,8 @@ public class OSNameTests {
 		for (String os : otherNames) {
 			String[] split = os.split(SEPARATOR);
 
-			assertEquals(split[0], OS.determine(split[1]).toString(), "Did not determine correct OS for name.");
+			assertEquals(split[0], OS.determine(split[1], "").toString(),
+					"Did not determine correct OS for name.");
 		}
 	}
 
