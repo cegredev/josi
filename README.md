@@ -35,7 +35,7 @@ OS os = OS.current();
 
 ...which can be anything from `WIN_95` to `WIN_10` to `MAC` to `LINUX` (the goal is to add more detailed Mac and Linux versions with help of the open source community). This is as specific as it gets for this library.
 
-The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/latest/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `WINDOWS`, `NAC`, `LINUX` or `OTHER`. You can get it like this:
+The more useful information is the [Family](https://javadoc.io/page/io.github.cegredev/josi/latest/io/github/cegredev/josi/OS.Family.html) of the operating system, i.e. `WINDOWS`, `MAC`, `LINUX` or `OTHER`. You can get it like this:
 
 ```java
 OS.Family family = os.getFamily();
