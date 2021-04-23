@@ -45,6 +45,15 @@ public enum OS {
 	 * An unknown or at least unrecognizable Windows based operating system.
 	 */
 	WIN_UNKNOWN(WINDOWS),
+
+	// Specific versions of macOS. Originally named MAC OS X, it was renamed to macOS starting
+	// with Sierra.
+	MAC_OSX_CHEETAH(Family.MAC), MAC_OSX_PUMA(Family.MAC), MAC_OSX_JAGUAR(Family.MAC),
+	MAC_OSX_PANTHER(Family.MAC), MAC_OSX_TIGER(Family.MAC), MAC_OSX_LEOPARD(Family.MAC),
+	MAC_OSX_SNOW_LEOPARD(Family.MAC), MAC_OSX_LION(Family.MAC), MAC_OSX_MOUNTAIN_LION(Family.MAC),
+	MAC_OSX_MAVERICKS(Family.MAC), MAC_OSX_YOSEMITE(Family.MAC), MAC_OSX_EL_CAPITAN(Family.MAC),
+	MAC_OS_SIERRA(Family.MAC), MAC_OS_HIGH_SIERRA(Family.MAC), MAC_OS_MOJAVE(Family.MAC),
+	MAC_OS_CATALINA(Family.MAC), MAC_OS_BIG_SUR(Family.MAC),
 	/**
 	 * Any Mac based operating system.
 	 */
@@ -61,7 +70,7 @@ public enum OS {
 	/**
 	 * The operating system running on the current PC.
 	 */
-	private static final OS CURRENT = determine(System.getProperty("os.name"));
+	private static final OS CURRENT = determine(System.getProperty("os.name"), System.getProperty("os.version"));
 
 	/**
 	 * The family the operating system belongs to.
@@ -80,10 +89,12 @@ public enum OS {
 	 *
 	 * @param name The name to determine the operating system from. Expects values in the format of {@code
 	 *             System.getProperty("os.name")}.
+	 * @param version The version to determine the operating system from. Expects values in the format of {@code
+	 * 	              System.getProperty("os.version")}.
 	 * @return An operating system matching the given name or other if the name can not be recognized.
 	 */
-	static OS determine(String name) {
-		// TODO: Implement Mac and Linux in more detail
+	static OS determine(String name, String version) {
+		// TODO: Implement Linux in more detail
 
 		// Locale.ROOT prevents funny locale stuff from happening
 		name = name.toLowerCase(Locale.ROOT).trim();
@@ -120,6 +131,54 @@ public enum OS {
 
 		// Decide Mac version
 		if (name.startsWith("mac")) {
+			String[] versionSplit = version.split("\\.");
+
+			if (versionSplit.length < 2) {
+				// If we only have the major version, we can't decide
+				return MAC;
+			}
+
+			String majorMinor = versionSplit[0] + "." + versionSplit[1];
+
+			switch (majorMinor) {
+				case "10.0":
+					return MAC_OSX_CHEETAH;
+				case "10.1":
+					return MAC_OSX_PUMA;
+				case "10.2":
+					return MAC_OSX_JAGUAR;
+				case "10.3":
+					return MAC_OSX_PANTHER;
+				case "10.4":
+					return MAC_OSX_TIGER;
+				case "10.5":
+					return MAC_OSX_LEOPARD;
+				case "10.6":
+					return MAC_OSX_SNOW_LEOPARD;
+				case "10.7":
+					return MAC_OSX_LION;
+				case "10.8":
+					return MAC_OSX_MOUNTAIN_LION;
+				case "10.9":
+					return MAC_OSX_MAVERICKS;
+				case "10.10":
+					return MAC_OSX_YOSEMITE;
+				case "10.11":
+					return MAC_OSX_EL_CAPITAN;
+				case "10.12":
+					return MAC_OS_SIERRA;
+				case "10.13":
+					return MAC_OS_HIGH_SIERRA;
+				case "10.14":
+					return MAC_OS_MOJAVE;
+				case "10.15":
+					return MAC_OS_CATALINA;
+				case "10.16":
+					return MAC_OS_BIG_SUR;
+				default:
+					break;
+			}
+
 			return MAC;
 		}
 
