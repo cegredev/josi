@@ -48,16 +48,16 @@ public enum OS {
 
 	// Specific versions of macOS. Originally named MAC OS X, it was renamed to macOS starting
 	// with Sierra.
-	MAC_OSX_CHEETAH(Family.MAC), MAC_OSX_PUMA(Family.MAC), MAC_OSX_JAGUAR(Family.MAC),
-	MAC_OSX_PANTHER(Family.MAC), MAC_OSX_TIGER(Family.MAC), MAC_OSX_LEOPARD(Family.MAC),
-	MAC_OSX_SNOW_LEOPARD(Family.MAC), MAC_OSX_LION(Family.MAC), MAC_OSX_MOUNTAIN_LION(Family.MAC),
-	MAC_OSX_MAVERICKS(Family.MAC), MAC_OSX_YOSEMITE(Family.MAC), MAC_OSX_EL_CAPITAN(Family.MAC),
-	MAC_OS_SIERRA(Family.MAC), MAC_OS_HIGH_SIERRA(Family.MAC), MAC_OS_MOJAVE(Family.MAC),
-	MAC_OS_CATALINA(Family.MAC), MAC_OS_BIG_SUR(Family.MAC),
+	MAC_OSX_CHEETAH(MAC), MAC_OSX_PUMA(MAC), MAC_OSX_JAGUAR(MAC),
+	MAC_OSX_PANTHER(MAC), MAC_OSX_TIGER(MAC), MAC_OSX_LEOPARD(MAC),
+	MAC_OSX_SNOW_LEOPARD(MAC), MAC_OSX_LION(MAC), MAC_OSX_MOUNTAIN_LION(MAC),
+	MAC_OSX_MAVERICKS(MAC), MAC_OSX_YOSEMITE(MAC), MAC_OSX_EL_CAPITAN(MAC),
+	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC),
+	MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
 	/**
 	 * Any Mac based operating system.
 	 */
-	MAC(Family.MAC),
+	MAC_UNKNOWN(MAC),
 	/**
 	 * Any Linux based operating system.
 	 */
@@ -135,7 +135,7 @@ public enum OS {
 
 			if (versionSplit.length < 2) {
 				// If we only have the major version, we can't decide
-				return MAC;
+				return MAC_UNKNOWN;
 			}
 
 			String majorMinor = versionSplit[0] + "." + versionSplit[1];
@@ -174,12 +174,14 @@ public enum OS {
 				case "10.15":
 					return MAC_OS_CATALINA;
 				case "10.16":
+					// Even though Big Sur is macOS version 11.x,
+					// the os.version system property returns 10.16
 					return MAC_OS_BIG_SUR;
 				default:
 					break;
 			}
 
-			return MAC;
+			return MAC_UNKNOWN;
 		}
 
 		// Decide Linux version
@@ -517,7 +519,7 @@ public enum OS {
 		/**
 		 * The MacOS operating system family.
 		 */
-		MAC(() -> OS.MAC),
+		MAC(() -> OS.MAC_OS_BIG_SUR),
 		/**
 		 * Any Linux based operating system family.
 		 */

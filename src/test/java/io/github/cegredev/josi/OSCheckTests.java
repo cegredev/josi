@@ -31,24 +31,24 @@ public class OSCheckTests {
 
 	@Test
 	public void testIsOS() {
-		assertTrue(OS.WIN_10.is(OS.WIN_95, OS.WIN_10, OS.MAC), "OS was not recognized!");
-		assertFalse(OS.WIN_8.is(OS.WIN_95, OS.WIN_10, OS.MAC), "OS was not recognized!");
+		assertTrue(OS.WIN_10.is(OS.WIN_95, OS.WIN_10, OS.MAC_UNKNOWN), "OS was not recognized!");
+		assertFalse(OS.WIN_8.is(OS.WIN_95, OS.WIN_10, OS.MAC_UNKNOWN), "OS was not recognized!");
 	}
 
 	@Test
 	public void testIsFamily() {
 		assertTrue(OS.WIN_10.isFamily(OS.Family.WINDOWS, OS.Family.MAC), "OS family was not recognized!");
-		assertFalse(OS.MAC.isFamily(OS.Family.LINUX, OS.Family.OTHER), "OS family was not recognized!");
+		assertFalse(OS.MAC_UNKNOWN.isFamily(OS.Family.LINUX, OS.Family.OTHER), "OS family was not recognized!");
 	}
 
 	@Test
 	public void testEnforceOS() {
 		assertDoesNotThrow(() -> OS.WIN_10.enforce(OS.WIN_95, OS.WIN_10), "Threw even though OS was allowed!");
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC.enforce(OS.WIN_8, OS.LINUX),
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforce(OS.WIN_8, OS.LINUX),
 				"Did not throw even though OS was not allowed!");
-		assertDoesNotThrow(() -> OS.LINUX.enforceNot(OS.WIN_10, OS.MAC),
+		assertDoesNotThrow(() -> OS.LINUX.enforceNot(OS.WIN_10, OS.MAC_UNKNOWN),
 				"Threw even though OS was allowed!");
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC.enforceNot(OS.MAC, OS.LINUX),
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNot(OS.MAC_UNKNOWN, OS.LINUX),
 				"Did not throw even though OS was not allowed!");
 	}
 
@@ -60,7 +60,7 @@ public class OSCheckTests {
 				OS.Family.OTHER), "Did not throw even though OS family was not allowed!");
 		assertDoesNotThrow(() -> OS.WIN_10.enforceNotFamily(OS.Family.MAC, OS.Family.LINUX),
 				"Threw even though OS family was allowed!");
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC.enforceNotFamily(OS.Family.MAC,
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNotFamily(OS.Family.MAC,
 				OS.Family.OTHER), "Did not throw even though OS family was not allowed!");
 	}
 
