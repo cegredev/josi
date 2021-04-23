@@ -11,7 +11,7 @@ Maven:
 <dependency>
   <groupId>io.github.cegredev</groupId>
   <artifactId>josi</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -19,7 +19,7 @@ Gradle:
 
 ```gradle
 dependencies {
-  implementation 'io.github.cegredev:josi:0.2.0'
+  implementation 'io.github.cegredev:josi:0.3.0'
 }
 ```
 
