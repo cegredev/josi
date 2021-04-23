@@ -27,13 +27,21 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests concerning the recognition of operating system names.
+ */
 public class OSNameTests {
 
+	private static final String FAIL_MESSAGE = "Did not determine the correct OS for the given name.";
+
+	/**
+	 * Used to separate enum name, os name and os version in the arrays below.
+	 */
 	private static final String SEPARATOR = ":";
 
-	// The problem with this is, that it relies on the naming of all the OSs in the OS enum to check the result of
-	// the determine method. So if any of those names get changed, you'll have to modify them here as well
-	private static final String[] windowsNames = {"UNKNOWN:Windows fj12l3j123", "95:Windows 95", "98:Windows 98",
+	// The problem with this is that it relies on the naming of all the OSs in the OS enum to check the result of
+	// the determine method. So if any of those names get changed, you'll have to modify them here as well.
+	private static final String[] windowsNames = {"UNKNOWN:Windows not real", "95:Windows 95", "98:Windows 98",
 			"XP:Windows XP", "VISTA:Windows Vista", "7:Windows 7", "8:Windows 8", "8_1:Windows 8.1", "10:Windows 10"};
 
 	private static final String[] macNames = {"UNKNOWN:Mac: ", "UNKNOWN:Mac:10", "OSX_CHEETAH:Mac OS X:10.0",
@@ -44,45 +52,39 @@ public class OSNameTests {
 
 	private static final String[] linuxNames = {"LINUX:Linux"};
 
-	private static final String[] otherNames = {"OTHER:an_os_that_does_not_exist"};
+	private static final String[] otherNames = {"Solaris"};
 
 	@Test
 	public void testWindowsDetermine() {
-		for (String os : windowsNames) {
-			String[] split = os.split(SEPARATOR);
+		for (String enumAndName : windowsNames) {
+			String[] split = enumAndName.split(SEPARATOR);
 
-			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1], ""),
-					"Did not determine correct OS for name.");
+			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1], ""), FAIL_MESSAGE);
 		}
 	}
 
 	@Test
 	public void testMacDetermine() {
-		for (String os : macNames) {
-			String[] split = os.split(SEPARATOR);
+		for (String enumNameAndVersion : macNames) {
+			String[] split = enumNameAndVersion.split(SEPARATOR);
 
-			assertEquals(OS.valueOf("MAC_" + split[0]), OS.determine(split[1], split[2]),
-					"Did not determine correct OS for name.");
+			assertEquals(OS.valueOf("MAC_" + split[0]), OS.determine(split[1], split[2]), FAIL_MESSAGE);
 		}
 	}
 
 	@Test
 	public void testLinuxDetermine() {
-		for (String os : linuxNames) {
-			String[] split = os.split(SEPARATOR);
+		for (String enumAndName : linuxNames) {
+			String[] split = enumAndName.split(SEPARATOR);
 
-			assertEquals(OS.valueOf(split[0]), OS.determine(split[1], ""),
-					"Did not determine correct OS for name.");
+			assertEquals(OS.valueOf(split[0]), OS.determine(split[1], ""), FAIL_MESSAGE);
 		}
 	}
 
 	@Test
 	public void testOtherDetermine() {
-		for (String os : otherNames) {
-			String[] split = os.split(SEPARATOR);
-
-			assertEquals(split[0], OS.determine(split[1], "").toString(),
-					"Did not determine correct OS for name.");
+		for (String name : otherNames) {
+			assertEquals(OS.OTHER, OS.determine(name, ""), FAIL_MESSAGE);
 		}
 	}
 

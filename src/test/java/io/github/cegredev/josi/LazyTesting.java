@@ -25,6 +25,9 @@ package io.github.cegredev.josi;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Used to quickly and dirtily test a feature during development.
+ */
 public class LazyTesting {
 
 	@Test

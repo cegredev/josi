@@ -27,13 +27,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests only concerning the {@link OS.Family} enum.
+ */
 public class OSFamilyTests {
 
 	@Test
 	public void testRepresentativeOfSameFamily() {
-		for (OS.Family family : OS.Family.values())
-			assertSame(family, family.getRepresentative().getFamily(),
-					"OS.Family had a representative of the wrong family!");
+		for (OS.Family family : OS.Family.values()) {
+			assertEquals(family, family.getRepresentative().getFamily(),
+					"Family had a representative of the wrong family!");
+		}
 	}
 
 }

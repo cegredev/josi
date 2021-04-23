@@ -27,7 +27,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// I really just do this for the coverage
+/**
+ * "Tests" {@link UnsupportedOSException}. This is really just here for the coverage.
+ */
 public class UnsupportedOSExceptionTests {
 
 	@Test

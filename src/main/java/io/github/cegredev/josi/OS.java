@@ -55,7 +55,7 @@ public enum OS {
 	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC),
 	MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
 	/**
-	 * Any Mac based operating system.
+	 * An unknown or at least unrecognizable Mac based operating system.
 	 */
 	MAC_UNKNOWN(MAC),
 	/**
@@ -87,10 +87,10 @@ public enum OS {
 	/**
 	 * Tries to recognize and map an operating system to the given name. Is package-private for tests.
 	 *
-	 * @param name The name to determine the operating system from. Expects values in the format of {@code
-	 *             System.getProperty("os.name")}.
+	 * @param name    The name to determine the operating system from. Expects values in the format of {@code
+	 *                System.getProperty("os.name")}.
 	 * @param version The version to determine the operating system from. Expects values in the format of {@code
-	 * 	              System.getProperty("os.version")}.
+	 *                System.getProperty("os.version")}.
 	 * @return An operating system matching the given name or other if the name can not be recognized.
 	 */
 	static OS determine(String name, String version) {
@@ -101,6 +101,7 @@ public enum OS {
 
 		// Decide Windows version
 		if (name.startsWith("win")) {
+			// TODO: Use version here instead of name
 			int lastSpace = name.lastIndexOf(' ');
 
 			if (lastSpace > -1) {
