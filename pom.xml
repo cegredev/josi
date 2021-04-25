@@ -6,7 +6,7 @@
 
     <groupId>io.github.cegredev</groupId>
     <artifactId>josi</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 
     <name>Josi</name>
     <packaging>jar</packaging>
