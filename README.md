@@ -146,7 +146,7 @@ switch (OS.current()) {
 
 Here are some of the things you could do:
 
-Add a new operating system for the [OS enum](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java): If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit of help is appreciated! If you want to know more, take a look at [this guide]() (work in progress!).
+Add a new operating system for the [OS enum](https://github.com/cegredev/josi/blob/main/src/main/java/io/github/cegredev/josi/OS.java): If you happen to be running one not present already, please add it! Since I'm a solo-developer running Windows, I can't possibly test and add every single one there is, so every little bit of help is appreciated! If you want to know more, take a look at [this guide](https://github.com/cegredev/josi/wiki/How-to-add-an-operating-system-to-the-OS-enum) (work in progress!).
 
 Add a new utility method to the OS enum, but only if you are convinced that it can be useful in many circumstances, as the library should be kept lightweight and not be bloated.
 
