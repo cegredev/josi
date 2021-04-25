@@ -52,10 +52,10 @@ public class OSCheckTests {
 				notThrowMessage = "Did not throw even though OS was not allowed!";
 
 		assertDoesNotThrow(() -> OS.WIN_10.enforce(OS.WIN_95, OS.WIN_10), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforce(OS.WIN_8, OS.LINUX),
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforce(OS.WIN_8, OS.LINUX_UNKNOWN),
 				notThrowMessage);
-		assertDoesNotThrow(() -> OS.LINUX.enforceNot(OS.WIN_10, OS.MAC_UNKNOWN), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNot(OS.MAC_UNKNOWN, OS.LINUX),
+		assertDoesNotThrow(() -> OS.LINUX_UNKNOWN.enforceNot(OS.WIN_10, OS.MAC_UNKNOWN), threwMessage);
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNot(OS.MAC_UNKNOWN, OS.LINUX_UNKNOWN),
 				notThrowMessage);
 	}
 
@@ -65,7 +65,7 @@ public class OSCheckTests {
 				notThrowMessage = "Did not throw even though OS family was not allowed!";
 
 		assertDoesNotThrow(() -> OS.WIN_10.enforceFamily(OS.Family.WINDOWS, OS.Family.LINUX), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.LINUX.enforceFamily(OS.Family.MAC, OS.Family.OTHER),
+		assertThrows(UnsupportedOSException.class, () -> OS.LINUX_UNKNOWN.enforceFamily(OS.Family.MAC, OS.Family.OTHER),
 				notThrowMessage);
 		assertDoesNotThrow(() -> OS.WIN_10.enforceNotFamily(OS.Family.MAC, OS.Family.LINUX), threwMessage);
 		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNotFamily(OS.Family.MAC,

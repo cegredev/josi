@@ -23,7 +23,9 @@
  */
 package io.github.cegredev.josi;
 
+import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -37,40 +39,55 @@ import static io.github.cegredev.josi.OS.Family.*;
  */
 public enum OS {
 
-	// I am aware some of these windows version might be overkill, but they were included in this answer:
+	// I'm aware some of these windows version might be overkill, but they were included in this answer:
 	// https://stackoverflow.com/a/31110542/11213660 which is where I got most of the windows code from, so why not?
-	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS), WIN_7(WINDOWS), WIN_8(WINDOWS),
-	WIN_8_1(WINDOWS), WIN_10(WINDOWS),
+	// TODO: Add these: WIN_ME(WINDOWS), WIN_2000(WINDOWS)
+	WIN_95(WINDOWS), WIN_98(WINDOWS), WIN_XP(WINDOWS), WIN_VISTA(WINDOWS),
+	WIN_7(WINDOWS), WIN_8(WINDOWS), WIN_8_1(WINDOWS), WIN_10(WINDOWS),
 	/**
 	 * An unknown or at least unrecognizable Windows based operating system.
 	 */
 	WIN_UNKNOWN(WINDOWS),
 
 	// Specific versions of macOS. Originally named MAC OS X, it was renamed to macOS starting
-	// with Sierra.
-	MAC_OSX_CHEETAH(MAC), MAC_OSX_PUMA(MAC), MAC_OSX_JAGUAR(MAC),
-	MAC_OSX_PANTHER(MAC), MAC_OSX_TIGER(MAC), MAC_OSX_LEOPARD(MAC),
-	MAC_OSX_SNOW_LEOPARD(MAC), MAC_OSX_LION(MAC), MAC_OSX_MOUNTAIN_LION(MAC),
-	MAC_OSX_MAVERICKS(MAC), MAC_OSX_YOSEMITE(MAC), MAC_OSX_EL_CAPITAN(MAC),
-	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC),
-	MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
+	// with Sierra. The operating systems represented here were mostly chosen based on this list:
+	// https://en.wikipedia.org/wiki/MacOS_version_history#Releases
+	MAC_OSX_CHEETAH(MAC), MAC_OSX_PUMA(MAC), MAC_OSX_JAGUAR(MAC), MAC_OSX_PANTHER(MAC),
+	MAC_OSX_TIGER(MAC), MAC_OSX_LEOPARD(MAC), MAC_OSX_SNOW_LEOPARD(MAC), MAC_OSX_LION(MAC),
+	MAC_OSX_MOUNTAIN_LION(MAC), MAC_OSX_MAVERICKS(MAC), MAC_OSX_YOSEMITE(MAC), MAC_OSX_EL_CAPITAN(MAC),
+	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC), MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
 	/**
 	 * An unknown or at least unrecognizable Mac based operating system.
 	 */
 	MAC_UNKNOWN(MAC),
+
+	// This selection of Linux based operating system was made mostly based on this article:
+	// https://www.tecmint.com/linux-distro-for-power-users/ As with any of the other families,
+	// if you feel an important one is missing, feel free to add it yourself!
+	DEBIAN(LINUX), UBUNTU(LINUX), GENTOO(LINUX), LINUX_MINT(LINUX), RED_HAT_ENTERPRISE_LINUX(LINUX),
+	CENTOS(LINUX), FEDORA(LINUX), ARCH_LINUX(LINUX),
 	/**
-	 * Any Linux based operating system.
+	 * Suse/OpenSUSE and any child-distributions.
 	 */
-	LINUX(Family.LINUX),
+	SUSE(LINUX),
+	/**
+	 * An unknown or at least unrecognizable Linux based operating system.
+	 */
+	LINUX_UNKNOWN(LINUX),
+	/**
+	 * The Solaris operating system.
+	 */
+	SOLARIS(OTHER),
 	/**
 	 * An operating system that cannot be classified.
 	 */
-	OTHER(Family.OTHER);
+	UNKNOWN(OTHER);
 
 	/**
 	 * The operating system running on the current PC.
 	 */
-	private static final OS CURRENT = determine(System.getProperty("os.name"), System.getProperty("os.version"));
+	private static final OS CURRENT = determine(System.getProperty("os.name"), System.getProperty("os.version"),
+			new File("/etc/os-release"));
 
 	/**
 	 * The family the operating system belongs to.
@@ -85,17 +102,17 @@ public enum OS {
 	}
 
 	/**
-	 * Tries to recognize and map an operating system to the given name. Is package-private for tests.
+	 * Tries to recognize and map a given name and version to the right OS. Is package-private for tests.
 	 *
-	 * @param name    The name to determine the operating system from. Expects values in the format of {@code
-	 *                System.getProperty("os.name")}.
-	 * @param version The version to determine the operating system from. Expects values in the format of {@code
-	 *                System.getProperty("os.version")}.
+	 * @param name      The name to determine the operating system from. Expects values in the format of {@code
+	 *                  System.getProperty("os.name")}.
+	 * @param version   The version to determine the operating system from. Expects values in the format of {@code
+	 *                  System.getProperty("os.version")}.
+	 * @param osRelease Usually contains OS information on Linux based systems, although it doesn't have to. Only set
+	 *                  manually for tests.
 	 * @return An operating system matching the given name or other if the name can not be recognized.
 	 */
-	static OS determine(String name, String version) {
-		// TODO: Implement Linux in more detail
-
+	static OS determine(String name, String version, File osRelease) {
 		// Locale.ROOT prevents funny locale stuff from happening
 		name = name.toLowerCase(Locale.ROOT).trim();
 
@@ -134,10 +151,9 @@ public enum OS {
 		if (name.startsWith("mac")) {
 			String[] versionSplit = version.split("\\.");
 
-			if (versionSplit.length < 2) {
-				// If we only have the major version, we can't decide
+			// If we only have the major version, we can't decide
+			if (versionSplit.length < 2)
 				return MAC_UNKNOWN;
-			}
 
 			String majorMinor = versionSplit[0] + "." + versionSplit[1];
 
@@ -179,18 +195,115 @@ public enum OS {
 					// the os.version system property returns 10.16
 					return MAC_OS_BIG_SUR;
 				default:
-					break;
+					return MAC_UNKNOWN;
 			}
-
-			return MAC_UNKNOWN;
 		}
 
 		// Decide Linux version
 		if (name.contains("nix") || name.contains("nux") || name.contains("aix")) {
-			return LINUX;
+			HashMap<String, String> osReleaseMap = new HashMap<>();
+
+			if (osRelease.exists()) {
+				try {
+					BufferedReader reader = new BufferedReader(new FileReader(osRelease));
+
+					String line;
+					while ((line = reader.readLine()) != null) {
+						int split = line.indexOf('=');
+
+						// Broken etc/os-release file, but others might still be correct
+						if (split <= -1)
+							continue;
+
+						String key = line.substring(0, split), value = line.substring(split + 1);
+						// Some distros put the value in quotation marks, some don't.
+						// To achieve the consistency needed for a switch statement, we remove them here.
+						if (value.startsWith("\""))
+							value = value.substring(1);
+						if (value.endsWith("\""))
+							value = value.substring(0, value.length() - 1);
+
+						osReleaseMap.put(key, value);
+					}
+				} catch (IOException e) {
+					System.err.println("Something went wrong while loading /etc/os-release!");
+					e.printStackTrace();
+					return LINUX_UNKNOWN;
+				}
+			}
+
+			// ID is the computer friendly name of the current Linux distribution
+			String id = osReleaseMap.get("ID");
+
+			// ID_LIKE is a list of space-separated IDs of parent distributions
+			String idLike = osReleaseMap.get("ID_LIKE");
+			if (id != null) {
+				OS distro = determineLinuxDistro(id);
+
+				if (distro == LINUX_UNKNOWN && idLike != null) {
+					for (String parentID : idLike.split(" ")) {
+						distro = determineLinuxDistro(parentID);
+
+						if (distro != LINUX_UNKNOWN)
+							return distro;
+					}
+				}
+
+				return distro;
+			}
+
+			return LINUX_UNKNOWN;
 		}
 
-		return OTHER;
+		// Others
+
+		if (name.contains("sunos"))
+			return SOLARIS;
+
+		return UNKNOWN;
+	}
+
+	/**
+	 * Package-private for tests.
+	 *
+	 * @param id The ID or any ID_LIKE of the current Linux distribution.
+	 * @return An OS matching the given ID or {@link #LINUX_UNKNOWN} if it cannot be identified.
+	 */
+	static OS determineLinuxDistro(String id) {
+		switch (id) {
+			// All the OSs up to (inclusive) SUSE can be found in this GitHub repo or its forks:
+			// https://gist.github.com/natefoo/814c5bf936922dad97ff
+			// Additional links for validation were also added to some
+
+			// https://blog.thewatertower.org/2020/01/07/stash-of-etc-os-release-files/
+			case "debian":
+				return DEBIAN;
+			case "ubuntu":
+				return UBUNTU;
+			case "centos":
+				return CENTOS;
+			case "fedora":
+				return FEDORA;
+			case "arch":
+				return ARCH_LINUX;
+			// https://gitweb.gentoo.org/proj/baselayout.git/tree/etc.Linux/os-release
+			// https://gist.github.com/Wuodan/52d9761a77331ca3b8d044a50b910f52
+			case "gentoo":
+				return GENTOO;
+			// https://en.opensuse.org/SDB:SUSE_and_openSUSE_Products_Version_Outputs
+			case "suse":
+			case "opensuse":
+				return SUSE;
+
+			// https://itsfoss.com/check-linux-mint-version/
+			case "linuxmint":
+				return LINUX_MINT;
+			// https://www.cyberciti.biz/faq/what-version-of-redhat-linux-am-i-running/
+			case "rhel":
+				return RED_HAT_ENTERPRISE_LINUX;
+			default:
+				return LINUX_UNKNOWN;
+		}
 	}
 
 	/**
@@ -524,11 +637,11 @@ public enum OS {
 		/**
 		 * Any Linux based operating system family.
 		 */
-		LINUX(() -> OS.LINUX),
+		LINUX(() -> OS.LINUX_UNKNOWN),
 		/**
 		 * Any other operating system family.
 		 */
-		OTHER(() -> OS.OTHER);
+		OTHER(() -> OS.UNKNOWN);
 
 		/**
 		 * Supplies an OS representing the family. This has to be a supplier, because if you just passed in the OS to
