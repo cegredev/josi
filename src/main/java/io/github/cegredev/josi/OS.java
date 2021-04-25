@@ -201,35 +201,35 @@ public enum OS {
 
 		// Decide Linux version
 		if (name.contains("nix") || name.contains("nux") || name.contains("aix")) {
+			// If the file does not exist there is nothing more we can achieve
+			if (!osRelease.exists())
+				return LINUX_UNKNOWN;
+
 			HashMap<String, String> osReleaseMap = new HashMap<>();
 
-			if (osRelease.exists()) {
-				try {
-					BufferedReader reader = new BufferedReader(new FileReader(osRelease));
+			try (BufferedReader reader = new BufferedReader(new FileReader(osRelease))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					int split = line.indexOf('=');
 
-					String line;
-					while ((line = reader.readLine()) != null) {
-						int split = line.indexOf('=');
+					// Broken etc/os-release file, but other lines might still be correct
+					if (split <= -1)
+						continue;
 
-						// Broken etc/os-release file, but others might still be correct
-						if (split <= -1)
-							continue;
+					String key = line.substring(0, split), value = line.substring(split + 1);
+					// Some distros put the value in quotation marks, some don't.
+					// To achieve the consistency needed for a switch statement, we remove them here.
+					if (value.startsWith("\""))
+						value = value.substring(1);
+					if (value.endsWith("\""))
+						value = value.substring(0, value.length() - 1);
 
-						String key = line.substring(0, split), value = line.substring(split + 1);
-						// Some distros put the value in quotation marks, some don't.
-						// To achieve the consistency needed for a switch statement, we remove them here.
-						if (value.startsWith("\""))
-							value = value.substring(1);
-						if (value.endsWith("\""))
-							value = value.substring(0, value.length() - 1);
-
-						osReleaseMap.put(key, value);
-					}
-				} catch (IOException e) {
-					System.err.println("Something went wrong while loading /etc/os-release!");
-					e.printStackTrace();
-					return LINUX_UNKNOWN;
+					osReleaseMap.put(key, value);
 				}
+			} catch (IOException e) {
+				System.err.println("Something went wrong while loading /etc/os-release!");
+				e.printStackTrace();
+				return LINUX_UNKNOWN;
 			}
 
 			// ID is the computer friendly name of the current Linux distribution
@@ -240,14 +240,10 @@ public enum OS {
 			if (id != null) {
 				OS distro = determineLinuxDistro(id);
 
-				if (distro == LINUX_UNKNOWN && idLike != null) {
-					for (String parentID : idLike.split(" ")) {
-						distro = determineLinuxDistro(parentID);
-
-						if (distro != LINUX_UNKNOWN)
+				if (distro == LINUX_UNKNOWN && idLike != null)
+					for (String parentID : idLike.split(" "))
+						if ((distro = determineLinuxDistro(parentID)) != LINUX_UNKNOWN)
 							return distro;
-					}
-				}
 
 				return distro;
 			}
@@ -264,12 +260,12 @@ public enum OS {
 	}
 
 	/**
-	 * Package-private for tests.
+	 * Tries to detect a Linux distribution based on the given ID.
 	 *
 	 * @param id The ID or any ID_LIKE of the current Linux distribution.
 	 * @return An OS matching the given ID or {@link #LINUX_UNKNOWN} if it cannot be identified.
 	 */
-	static OS determineLinuxDistro(String id) {
+	private static OS determineLinuxDistro(String id) {
 		switch (id) {
 			// All the OSs up to (inclusive) SUSE can be found in this GitHub repo or its forks:
 			// https://gist.github.com/natefoo/814c5bf936922dad97ff
@@ -331,10 +327,8 @@ public enum OS {
 				return mac;
 			case LINUX:
 				return linux;
-			case OTHER:
+			default:
 				return other;
-			default: // This should never happen
-				throw new UnsupportedOSException();
 		}
 	}
 
@@ -358,7 +352,7 @@ public enum OS {
 			case LINUX:
 				return linux;
 			default:
-				throw new UnsupportedOSException();
+				throw new UnsupportedOSException(this);
 		}
 	}
 
@@ -392,7 +386,7 @@ public enum OS {
 			case MAC:
 				return mac;
 			default:
-				throw new UnsupportedOSException();
+				throw new UnsupportedOSException(this);
 		}
 	}
 
@@ -426,7 +420,7 @@ public enum OS {
 			case LINUX:
 				return linux;
 			default:
-				throw new UnsupportedOSException();
+				throw new UnsupportedOSException(this);
 		}
 	}
 
@@ -460,7 +454,7 @@ public enum OS {
 			case LINUX:
 				return linux;
 			default:
-				throw new UnsupportedOSException();
+				throw new UnsupportedOSException(this);
 		}
 	}
 
@@ -489,7 +483,7 @@ public enum OS {
 		if (getFamily() == Family.WINDOWS)
 			return windows;
 
-		throw new UnsupportedOSException();
+		throw new UnsupportedOSException(this);
 	}
 
 	/**
@@ -517,7 +511,7 @@ public enum OS {
 		if (getFamily() == Family.MAC)
 			return mac;
 
-		throw new UnsupportedOSException();
+		throw new UnsupportedOSException(this);
 	}
 
 	/**
@@ -545,7 +539,7 @@ public enum OS {
 		if (getFamily() == Family.LINUX)
 			return linux;
 
-		throw new UnsupportedOSException();
+		throw new UnsupportedOSException(this);
 	}
 
 	/**
@@ -637,17 +631,16 @@ public enum OS {
 		/**
 		 * Any Linux based operating system family.
 		 */
-		LINUX(() -> OS.LINUX_UNKNOWN),
+		LINUX(() -> OS.UBUNTU),
 		/**
 		 * Any other operating system family.
 		 */
 		OTHER(() -> OS.UNKNOWN);
 
 		/**
-		 * Supplies an OS representing the family. This has to be a supplier, because if you just passed in the OS to
-		 * the constructor you would create a circular definition, because each OS also references a family at
-		 * construction, meaning that the value would always be null, because this constructor would be called before
-		 * the actual OS value was set.
+		 * Supplies an OS representing the family. You can't just pass the enum value itself because it would still be
+		 * {@code null} at the time these families are constructed, since the OS constructors themselves reference
+		 * them.
 		 */
 		private final Supplier<OS> representative;
 

@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
@@ -52,11 +53,13 @@ public class OSNameTests {
 	private static final String[] windowsNames = {"UNKNOWN:Windows 1.0", "95:Windows 95", "98:Windows 98",
 			"XP:Windows XP", "VISTA:Windows Vista", "7:Windows 7", "8:Windows 8", "8_1:Windows 8.1", "10:Windows 10"};
 
-	private static final String[] macNames = {"UNKNOWN:Mac: ", "UNKNOWN:Mac:10", "OSX_CHEETAH:Mac OS X:10.0",
-			"OSX_PUMA:Mac OS X:10.1.1", "OSX_JAGUAR:Mac:10.2.4", "OSX_PANTHER:Mac:10.3", "OSX_TIGER:Mac:10.4",
-			"OSX_LEOPARD:Mac:10.5.1", "OSX_SNOW_LEOPARD:Mac:10.6", "OSX_LION:Mac:10.7", "OSX_MOUNTAIN_LION:Mac:10.8",
-			"OSX_MAVERICKS:Mac:10.9", "OSX_YOSEMITE:Mac:10.10", "OSX_EL_CAPITAN:Mac:10.11", "OS_SIERRA:Mac:10.12",
-			"OS_HIGH_SIERRA:Mac:10.13", "OS_MOJAVE:Mac:10.14.", "OS_CATALINA:Mac:10.15", "OS_BIG_SUR:Mac:10.16"};
+	private static final String[] macNames = {"UNKNOWN:Mac: ", "UNKNOWN:Mac:1.0", "UNKNOWN:Mac:10",
+			"OSX_CHEETAH:MacOS X:10.0", "OSX_PUMA:Mac OS X:10.1.1", "OSX_JAGUAR:Mac:10.2.4", "OSX_PANTHER:Mac:10.3",
+			"OSX_TIGER:Mac:10.4", "OSX_LEOPARD:Mac:10.5.1", "OSX_SNOW_LEOPARD:Mac:10.6", "OSX_LION:Mac:10.7",
+			"OSX_MOUNTAIN_LION:Mac:10.8", "OSX_MAVERICKS:Mac:10.9", "OSX_YOSEMITE:Mac:10.10",
+			"OSX_EL_CAPITAN:Mac:10.11", "OS_SIERRA:Mac:10.12", "OS_HIGH_SIERRA:Mac:10.13", "OS_MOJAVE:Mac:10.14.",
+			"OS_CATALINA:Mac:10.15",
+			"OS_BIG_SUR:Mac:10.16"};
 
 	private static final String[] linuxNames = {"LINUX_UNKNOWN:Linux: ", "DEBIAN:debian:debian",
 			"UBUNTU:ubuntu:debian", "CENTOS:centos:rhel fedora", "FEDORA:fedora: ", "ARCH_LINUX:arch: ",
@@ -86,6 +89,9 @@ public class OSNameTests {
 
 	@Test
 	public void testLinuxDetermine() throws IOException {
+		if (!ETC_OSRELEASE.exists())
+			ETC_OSRELEASE.createNewFile();
+
 		for (String enumIDAndIDLIKE : linuxNames) {
 			String[] split = enumIDAndIDLIKE.split(SEPARATOR);
 
@@ -98,6 +104,22 @@ public class OSNameTests {
 
 			assertEquals(OS.valueOf(split[0]), OS.determine("Linux", "", ETC_OSRELEASE), FAIL_MESSAGE);
 		}
+
+		// Test broken /etc/os-release file
+		Files.write(ETC_OSRELEASE.toPath(), "ID ubuntu\n=debian".getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
+				StandardOpenOption.WRITE);
+		assertEquals(OS.LINUX_UNKNOWN, OS.determine("Linux", "", ETC_OSRELEASE),
+				"Did not return unknown even though input file was broken!");
+
+		// Test return LINUX_UNKNOWN in case of IOException during reading
+		final RandomAccessFile raFile = new RandomAccessFile(ETC_OSRELEASE, "rw");
+		Files.write(ETC_OSRELEASE.toPath(), "ID=ubuntu".getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
+				StandardOpenOption.WRITE);
+		raFile.getChannel().lock();
+		System.out.println("If there is an IOException below this line, it is INTENDED and means the test was " +
+				"successful. An AssertionError of course isn't.");
+		assertEquals(OS.LINUX_UNKNOWN, OS.determine("Linux", "", ETC_OSRELEASE));
+		raFile.getChannel().close();
 	}
 
 	@Test
