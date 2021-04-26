@@ -26,108 +26,147 @@ package io.github.cegredev.josi;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static io.github.cegredev.josi.OS.*;
 
 /**
- * Tests concerning the recognition of operating system names.
+ * Tests concerning the recognition of operating systems based on the given information (like name, version, or
+ * /etc/os-release).
  */
 public class OSNameTests {
 
 	private static final String FAIL_MESSAGE = "Did not determine the correct OS for the given name.";
 
-	// Relative path, yay! Let's hope this doesn't break.
-	private static final File ETC_OSRELEASE = new File("src/test/resources/etc/os-release");
+	private static final WDT[] WIN_TESTS = {new WDT(WIN_UNKNOWN, "Windows 1.0"), new WDT(WIN_95, "Windows 95"),
+			new WDT(WIN_98, "Windows 98"), new WDT(WIN_XP, "Windows XP"), new WDT(WIN_VISTA, "Windows Vista"),
+			new WDT(WIN_7, "Windows 7"), new WDT(WIN_8, "Windows 8"), new WDT(WIN_8_1, "Windows 8.1"),
+			new WDT(WIN_10, "Windows 10")};
 
-	/**
-	 * Used to separate enum name, os name and os version in the arrays below.
-	 */
-	private static final String SEPARATOR = ":";
+	private static final MDT[] MAC_TESTS = {new MDT(MAC_UNKNOWN, "Mac", " "), new MDT(MAC_UNKNOWN, "Mac", "1.0"),
+			new MDT(MAC_UNKNOWN, "Mac", "10"), new MDT(MAC_OSX_CHEETAH, "MacOS X", "10.0"),
+			new MDT(MAC_OSX_PUMA, "MacOS X", "10.1.1"), new MDT(MAC_OSX_JAGUAR, "MacOS X", "10.2.4"),
+			new MDT(MAC_OSX_PANTHER, "Mac", "10.3"), new MDT(MAC_OSX_TIGER, "Mac", "10.4"),
+			new MDT(MAC_OSX_LEOPARD, "Mac", "10.5.1"), new MDT(MAC_OSX_SNOW_LEOPARD, "Mac", "10.6"),
+			new MDT(MAC_OSX_LION, "Mac", "10.7"), new MDT(MAC_OSX_MOUNTAIN_LION, "Mac", "10.8"),
+			new MDT(MAC_OSX_MAVERICKS, "Mac", "10.9"), new MDT(MAC_OSX_YOSEMITE, "Mac", "10.10"),
+			new MDT(MAC_OSX_EL_CAPITAN, "Mac", "10.11"), new MDT(MAC_OS_SIERRA, "Mac", "10.12"),
+			new MDT(MAC_OS_HIGH_SIERRA, "Mac", "10.13"), new MDT(MAC_OS_MOJAVE, "Mac", "10.14"),
+			new MDT(MAC_OS_CATALINA, "Mac", "10.15"), new MDT(MAC_OS_BIG_SUR, "Mac", "10.16")};
 
-	// The problem with this is that it relies on the naming of all the OSs in the OS enum to check the result of
-	// the determine method. So if any of those names get changed, you'll have to modify them here as well.
-	private static final String[] windowsNames = {"UNKNOWN:Windows 1.0", "95:Windows 95", "98:Windows 98",
-			"XP:Windows XP", "VISTA:Windows Vista", "7:Windows 7", "8:Windows 8", "8_1:Windows 8.1", "10:Windows 10"};
+	private static final LDT[] LINUX_TESTS = {new LDT(LINUX_UNKNOWN, "unknown"), new LDT(DEBIAN, "debian"),
+			new LDT(UBUNTU, "ubuntu"), new LDT(GENTOO, "gentoo"), new LDT(LINUX_MINT, "linux_mint"),
+			new LDT(RED_HAT_ENTERPRISE_LINUX, "rhel"), new LDT(CENTOS, "centos"), new LDT(FEDORA, "fedora"),
+			new LDT(ARCH_LINUX, "arch"), new LDT(SUSE, "suse")};
 
-	private static final String[] macNames = {"UNKNOWN:Mac: ", "UNKNOWN:Mac:1.0", "UNKNOWN:Mac:10",
-			"OSX_CHEETAH:MacOS X:10.0", "OSX_PUMA:Mac OS X:10.1.1", "OSX_JAGUAR:Mac:10.2.4", "OSX_PANTHER:Mac:10.3",
-			"OSX_TIGER:Mac:10.4", "OSX_LEOPARD:Mac:10.5.1", "OSX_SNOW_LEOPARD:Mac:10.6", "OSX_LION:Mac:10.7",
-			"OSX_MOUNTAIN_LION:Mac:10.8", "OSX_MAVERICKS:Mac:10.9", "OSX_YOSEMITE:Mac:10.10",
-			"OSX_EL_CAPITAN:Mac:10.11", "OS_SIERRA:Mac:10.12", "OS_HIGH_SIERRA:Mac:10.13", "OS_MOJAVE:Mac:10.14.",
-			"OS_CATALINA:Mac:10.15",
-			"OS_BIG_SUR:Mac:10.16"};
-
-	private static final String[] linuxNames = {"LINUX_UNKNOWN:Linux: ", "DEBIAN:debian:debian",
-			"UBUNTU:ubuntu:debian", "CENTOS:centos:rhel fedora", "FEDORA:fedora: ", "ARCH_LINUX:arch: ",
-			"GENTOO:gentoo: ", "SUSE:\"opensuse\":\"suse\"", "SUSE:\"opensuse-leap\":\"suse opensuse\"", "SUSE" +
-			":\"opensuse-tumbleweed\":\"suse opensuse\"", "SUSE:\"opensuse-tumbleweed-kubic\":\"suse opensuse\"",
-			"LINUX_MINT:linuxmint:ubuntu", "RED_HAT_ENTERPRISE_LINUX:rhel:fedora"};
-
-	private static final String[] otherNames = {"UNKNOWN:does not exist", "SOLARIS:sunos"};
+	private static final ODT[] OTHER_TESTS = {new ODT(UNKNOWN, "does not exist", ""), new ODT(SOLARIS, "sunos", "")};
 
 	@Test
 	public void testWindowsDetermine() {
-		for (String enumAndName : windowsNames) {
-			String[] split = enumAndName.split(SEPARATOR);
-
-			assertEquals(OS.valueOf("WIN_" + split[0]), OS.determine(split[1], "", ETC_OSRELEASE), FAIL_MESSAGE);
-		}
+		for (WDT test : WIN_TESTS)
+			assertEquals(test.expected, OS.determine(test.name, "", null), FAIL_MESSAGE);
 	}
 
 	@Test
 	public void testMacDetermine() {
-		for (String enumNameAndVersion : macNames) {
-			String[] split = enumNameAndVersion.split(SEPARATOR);
-
-			assertEquals(OS.valueOf("MAC_" + split[0]), OS.determine(split[1], split[2], ETC_OSRELEASE), FAIL_MESSAGE);
-		}
+		for (MDT test : MAC_TESTS)
+			assertEquals(test.expected, OS.determine(test.name, test.version, null), FAIL_MESSAGE);
 	}
 
 	@Test
-	public void testLinuxDetermine() throws IOException {
-		if (!ETC_OSRELEASE.exists())
-			ETC_OSRELEASE.createNewFile();
+	public void testLinuxDetermine() {
+		String basePath = "src/test/resources/etc/os-releases/";
 
-		for (String enumIDAndIDLIKE : linuxNames) {
-			String[] split = enumIDAndIDLIKE.split(SEPARATOR);
+		for (LDT test : LINUX_TESTS) {
+			for (int i = 0; i < 10000; i++) {
+				File file = new File(basePath + test.fileName + i + ".txt");
+				if (!file.exists())
+					break;
 
-			// Oh boy, a test dependent on an IO interaction. Sadly this is the easiest way for me to implement it
-			// without changing the structure of the determine method even more and thereby making it more confusing.
-			// Let's hope this doesn't cause any problems.
-			String content = "ID=" + split[1] + System.lineSeparator() + "ID_LIKE=" + split[2];
-			Files.write(ETC_OSRELEASE.toPath(), content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
-					StandardOpenOption.WRITE);
-
-			assertEquals(OS.valueOf(split[0]), OS.determine("Linux", "", ETC_OSRELEASE), FAIL_MESSAGE);
+				assertEquals(test.expected, OS.determine("Linux", "", file), FAIL_MESSAGE);
+			}
 		}
 
-		// Test broken /etc/os-release file
-		Files.write(ETC_OSRELEASE.toPath(), "ID ubuntu\n=debian".getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
-				StandardOpenOption.WRITE);
-		assertEquals(OS.LINUX_UNKNOWN, OS.determine("Linux", "", ETC_OSRELEASE),
-				"Did not return unknown even though input file was broken!");
+		// Special case file does not exist
+		assertEquals(LINUX_UNKNOWN, OS.determine("Linux", "",
+				new File("a file that does not exist")), FAIL_MESSAGE);
 
-		// Test return LINUX_UNKNOWN in case of IOException during reading
-		final RandomAccessFile raFile = new RandomAccessFile(ETC_OSRELEASE, "rw");
-		Files.write(ETC_OSRELEASE.toPath(), "ID=ubuntu".getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
-				StandardOpenOption.WRITE);
-		raFile.getChannel().lock();
-		System.out.println("If there is an IOException below this line, it is INTENDED and means the test was " +
-				"successful. An AssertionError of course isn't.");
-		assertEquals(OS.LINUX_UNKNOWN, OS.determine("Linux", "", ETC_OSRELEASE));
-		raFile.getChannel().close();
+		// Special case file is broken:
+		assertEquals(LINUX_UNKNOWN, OS.determine("Linux", "", new File(basePath + "broken.txt")),
+				FAIL_MESSAGE);
 	}
 
 	@Test
 	public void testOtherDetermine() {
-		for (String enumAndName : otherNames) {
-			String[] split = enumAndName.split(SEPARATOR);
+		for (ODT test : OTHER_TESTS)
+			assertEquals(test.expected, OS.determine(test.name, test.version, null), FAIL_MESSAGE);
+	}
 
-			assertEquals(OS.valueOf(split[0]), OS.determine(split[1], "", ETC_OSRELEASE), FAIL_MESSAGE);
+	/**
+	 * WDT = Windows determine test
+	 */
+	private static class WDT extends DetermineTest {
+
+		private final String name;
+
+		private WDT(OS expected, String name) {
+			super(expected);
+
+			this.name = name;
+		}
+	}
+
+	/**
+	 * MDT = Mac determine test
+	 */
+	private static class MDT extends DetermineTest {
+
+		private final String name, version;
+
+		private MDT(OS expected, String name, String version) {
+			super(expected);
+
+			this.name = name;
+			this.version = version;
+		}
+	}
+
+	/**
+	 * LDT = Linux determine test
+	 */
+	private static class LDT extends DetermineTest {
+
+		private final String fileName;
+
+		private LDT(OS expected, String name) {
+			super(expected);
+
+			this.fileName = name;
+		}
+
+	}
+
+	/**
+	 * ODT = Other determine test
+	 */
+	private static class ODT extends DetermineTest {
+
+		private final String name, version;
+
+		private ODT(OS expected, String name, String version) {
+			super(expected);
+
+			this.name = name;
+			this.version = version;
+		}
+	}
+
+	private static class DetermineTest {
+
+		protected final OS expected;
+
+		private DetermineTest(OS expected) {
+			this.expected = expected;
 		}
 	}
 
