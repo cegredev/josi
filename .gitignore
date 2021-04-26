@@ -19,9 +19,6 @@
 *.tar.gz
 *.rar
 
-# Changing test resources
-src/test/resources/etc/os-release
-
 # Maven
 target/
 pom.xml.*
