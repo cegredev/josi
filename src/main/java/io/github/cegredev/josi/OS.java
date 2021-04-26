@@ -234,21 +234,19 @@ public enum OS {
 
 			// ID is the computer friendly name of the current Linux distribution
 			String id = osReleaseMap.get("ID");
-
 			// ID_LIKE is a list of space-separated IDs of parent distributions
 			String idLike = osReleaseMap.get("ID_LIKE");
-			if (id != null) {
-				OS distro = determineLinuxDistro(id);
 
-				if (distro == LINUX_UNKNOWN && idLike != null)
-					for (String parentID : idLike.split(" "))
-						if ((distro = determineLinuxDistro(parentID)) != LINUX_UNKNOWN)
-							return distro;
+			OS distro = LINUX_UNKNOWN;
+			if (id != null)
+				distro = determineLinuxDistro(id);
 
-				return distro;
-			}
+			if (distro == LINUX_UNKNOWN && idLike != null)
+				for (String parentID : idLike.split(" "))
+					if ((distro = determineLinuxDistro(parentID)) != LINUX_UNKNOWN)
+						return distro;
 
-			return LINUX_UNKNOWN;
+			return distro;
 		}
 
 		// Others
