@@ -155,7 +155,12 @@ public enum OS {
 			if (versionSplit.length < 2)
 				return MAC_UNKNOWN;
 
-			String majorMinor = versionSplit[0] + "." + versionSplit[1];
+			// macOS Big Sur is version 11.x, where x can be any number.
+			// In order to make the switch statement below easier, let's just
+			// set the version string to 11.0 for all 11.x versions.
+			String majorMinor = "11".equals(versionSplit[0])
+					? "11.0"
+					: versionSplit[0] + "." + versionSplit[1];
 
 			switch (majorMinor) {
 				case "10.0":
@@ -191,8 +196,8 @@ public enum OS {
 				case "10.15":
 					return MAC_OS_CATALINA;
 				case "10.16":
-					// Even though Big Sur is macOS version 11.x,
-					// the os.version system property returns 10.16
+				case "11.0":
+					// Big Sur is macOS version 11.x, but sometimes 10.16 is returned
 					return MAC_OS_BIG_SUR;
 				default:
 					return MAC_UNKNOWN;
