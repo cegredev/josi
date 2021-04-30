@@ -1,0 +1,49 @@
+# CI on all pushes or merges to main branch
+name: CI
+
+on:
+  # by request
+  workflow_dispatch:
+  # on all pull requests
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+  # on push/merge to main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+    
+jobs:
+  # Runs current branch on Windows, Linux, macOS with multiple JDKs
+  testmatrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # Baseline support, Current LTS, Current GA, Current EA
+        java: [8, 11, 16, 17-ea]
+        # Tests are not OS-dependent, if later tests require OS, expand this
+        os: [ubuntu-latest]
+      fail-fast: false
+    name: JDK ${{ matrix.java }}, ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+      - name: Cache Maven packages
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2          
+      - name: Test with Maven
+        run: ./mvnw test -B
