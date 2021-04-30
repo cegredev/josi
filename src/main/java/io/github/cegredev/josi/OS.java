@@ -151,48 +151,53 @@ public enum OS {
 		if (name.startsWith("mac")) {
 			String[] versionSplit = version.split("\\.");
 
-			// If we only have the major version, we can't decide
-			if (versionSplit.length < 2)
-				return MAC_UNKNOWN;
+			// Get the major and minor version. If we can't read it, setting it to unknown
+			// will allow it to fall through the switch and return MAC_UNKNOWN
+			String major = versionSplit.length > 0 ? versionSplit[0] : "Unknown";
+			String minor = versionSplit.length > 1 ? versionSplit[1] : "Unknown";
 
-			String majorMinor = versionSplit[0] + "." + versionSplit[1];
-
-			switch (majorMinor) {
-				case "10.0":
-					return MAC_OSX_CHEETAH;
-				case "10.1":
-					return MAC_OSX_PUMA;
-				case "10.2":
-					return MAC_OSX_JAGUAR;
-				case "10.3":
-					return MAC_OSX_PANTHER;
-				case "10.4":
-					return MAC_OSX_TIGER;
-				case "10.5":
-					return MAC_OSX_LEOPARD;
-				case "10.6":
-					return MAC_OSX_SNOW_LEOPARD;
-				case "10.7":
-					return MAC_OSX_LION;
-				case "10.8":
-					return MAC_OSX_MOUNTAIN_LION;
-				case "10.9":
-					return MAC_OSX_MAVERICKS;
-				case "10.10":
-					return MAC_OSX_YOSEMITE;
-				case "10.11":
-					return MAC_OSX_EL_CAPITAN;
-				case "10.12":
-					return MAC_OS_SIERRA;
-				case "10.13":
-					return MAC_OS_HIGH_SIERRA;
-				case "10.14":
-					return MAC_OS_MOJAVE;
-				case "10.15":
-					return MAC_OS_CATALINA;
-				case "10.16":
-					// Even though Big Sur is macOS version 11.x,
-					// the os.version system property returns 10.16
+			switch (major) {
+				case "10":
+					switch (minor) {
+						case "0":
+							return MAC_OSX_CHEETAH;
+						case "1":
+							return MAC_OSX_PUMA;
+						case "2":
+							return MAC_OSX_JAGUAR;
+						case "3":
+							return MAC_OSX_PANTHER;
+						case "4":
+							return MAC_OSX_TIGER;
+						case "5":
+							return MAC_OSX_LEOPARD;
+						case "6":
+							return MAC_OSX_SNOW_LEOPARD;
+						case "7":
+							return MAC_OSX_LION;
+						case "8":
+							return MAC_OSX_MOUNTAIN_LION;
+						case "9":
+							return MAC_OSX_MAVERICKS;
+						case "10":
+							return MAC_OSX_YOSEMITE;
+						case "11":
+							return MAC_OSX_EL_CAPITAN;
+						case "12":
+							return MAC_OS_SIERRA;
+						case "13":
+							return MAC_OS_HIGH_SIERRA;
+						case "14":
+							return MAC_OS_MOJAVE;
+						case "15":
+							return MAC_OS_CATALINA;
+						case "16":
+							// Big Sur is macOS version 11.x, but sometimes 10.16 is returned
+							return MAC_OS_BIG_SUR;
+						default:
+							return MAC_UNKNOWN;
+					}
+				case "11":
 					return MAC_OS_BIG_SUR;
 				default:
 					return MAC_UNKNOWN;
