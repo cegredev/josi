@@ -583,6 +583,22 @@ public enum OS {
 	}
 
 	/**
+	 * Checks if this OS is at the same or later version of the given OS. Only relevant for Windows and Mac.
+	 *
+	 * @param operatingSystem An operating system with version.
+	 * @return If this OS is the same version as the given OS or a later one of the same family.
+	 */
+	public boolean isAtLeast(OS operatingSystem) {
+		// Restrict to families with versions
+		enforceFamily(Family.MAC, Family.WINDOWS);
+		// Verify family matches
+		enforceFamily(operatingSystem.getFamily());
+		// True if this is equal to or after in enum order
+		// Assumes "unknown" is a newer version
+		return this.compareTo(operatingSystem) >= 0;
+	}
+
+	/**
 	 * Throws an {@link UnsupportedOSException} if this operating system is part of the given array.
 	 *
 	 * @param operatingSystems An array of operating systems that this OS is not allowed to be part of.

@@ -40,6 +40,25 @@ public class OSCheckTests {
 	}
 
 	@Test
+	public void testIsAtLeastOS() {
+		String message = "OS was not recognized!";
+		assertTrue(OS.WIN_10.isAtLeast(OS.WIN_95), message);
+		assertTrue(OS.WIN_7.isAtLeast(OS.WIN_7), message);
+		assertFalse(OS.WIN_8.isAtLeast(OS.WIN_10), message);
+		assertTrue(OS.MAC_OS_BIG_SUR.isAtLeast(OS.MAC_OS_SIERRA), message);
+		assertTrue(OS.MAC_OS_CATALINA.isAtLeast(OS.MAC_OS_CATALINA), message);
+		assertFalse(OS.MAC_OSX_LION.isAtLeast(OS.MAC_OSX_MOUNTAIN_LION), message);
+
+		String notThrowMessage = "Did not throw even though OS was not allowed!";
+		assertThrows(UnsupportedOSException.class, () -> OS.UBUNTU.isAtLeast(OS.UBUNTU),
+		              notThrowMessage);
+		assertThrows(UnsupportedOSException.class, () -> OS.WIN_10.isAtLeast(OS.MAC_OS_SIERRA),
+		              notThrowMessage);
+		assertThrows(UnsupportedOSException.class, () -> OS.MAC_OS_BIG_SUR.isAtLeast(OS.WIN_7),
+		              notThrowMessage);
+	}
+
+	@Test
 	public void testIsFamily() {
 		String message = "OS family was not recognized!";
 		assertTrue(OS.WIN_10.isFamily(OS.Family.WINDOWS, OS.Family.MAC), message);
