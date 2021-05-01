@@ -1,0 +1,29 @@
+# Setup requirements: put your Sonatype username/password into Github secrets
+name: Sonatype Snapshot Deployment
+
+on:
+  # Deploy snapshot on push/merge to main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+
+jobs:
+  build:
+    if: github.repository_owner == 'cegredev' && ! contains(toJSON(github.event.head_commit.message), '[maven-release-plugin]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Deploy to Sonatype
+        run: ./mvnw deploy -DskipTests -B --settings ./.mvn/settings.xml
+        env:
+          CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
+          CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
