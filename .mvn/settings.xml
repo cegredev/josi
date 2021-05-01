@@ -9,4 +9,18 @@
 			<password>${env.CI_DEPLOY_PASSWORD}</password>
 		</server>
 	</servers>
+
+<!-- Haven't tried this yet:-->
+<!--	<profiles>-->
+<!--		<profile>-->
+<!--			<id>ossrh</id>-->
+<!--			<activation>-->
+<!--				<activeByDefault>true</activeByDefault>-->
+<!--			</activation>-->
+<!--			<properties>-->
+<!--				<gpg.executable>gpg</gpg.executable>-->
+<!--				<gpg.passphrase>${env.OSSRH_GPG_SECRET_KEY}</gpg.passphrase>-->
+<!--			</properties>-->
+<!--		</profile>-->
+<!--	</profiles>-->
 </settings>
