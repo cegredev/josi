@@ -589,8 +589,8 @@ public enum OS {
 	 * @return If this OS is the same version as the given OS or a later one of the same family.
 	 */
 	public boolean isAtLeast(OS operatingSystem) {
-	        // Family must match and not be OTHER
-		if (!isFamily(operatingSystem.getFamily()) || isFamily(Family.OTHER))
+		// Family must match and OS must not be unknown
+		if (!isFamily(operatingSystem.getFamily()) || is(UNKNOWN))
 		        return false;
 		// True if enum is identical
 		if (is(operatingSystem))
