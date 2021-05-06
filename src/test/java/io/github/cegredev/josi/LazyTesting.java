@@ -25,14 +25,23 @@ package io.github.cegredev.josi;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
- * Used to quickly and dirtily test a feature during development.
+ * Used to quickly and dirtily test features during development.
  */
 public class LazyTesting {
 
 	@Test
 	public void testAny() {
-		System.out.println("Your operating system is: " + OS.current());
+		assertFalse(new OSConstraint(OS.WIN_95).isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(), "");
+
+		assertEquals("Unix", new OSConstraint(OS.MAC_OS_BIG_SUR).isFamily(OS.Family.LINUX, OS.Family.MAC).store(
+				"Unix").isFamily(OS.Family.WINDOWS).store("Windows").get(), "Did not get correct value!");
+
+		assertThrows(UnsupportedOSException.class,
+				() -> new OSConstraint(OS.UBUNTU).isNotFamily(OS.Family.LINUX).enforce());
+
 	}
 
 }
