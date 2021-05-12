@@ -21,29 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
-import org.junit.jupiter.api.Test;
+import io.github.cegredev.josi.OS;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Used to quickly and dirtily test features during development.
- */
-public class LazyTesting {
+public class ConditionChain {
 
-	@Test
-	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
+	public interface Condition {
 
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
-				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
-				"Did not get correct value!");
-
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
+		boolean check(OS operatingSystem);
 
 	}
 
+	private final List<Condition> conditions = new ArrayList<>();
+
+	public boolean add(Condition condition) {
+		return getConditions().add(condition);
+	}
+
+	public boolean isTrue(OS operatingSystem) {
+		for (Condition condition : getConditions())
+			if (!condition.check(operatingSystem))
+				return false;
+		return true;
+	}
+
+	public List<Condition> getConditions() {
+		return conditions;
+	}
 }

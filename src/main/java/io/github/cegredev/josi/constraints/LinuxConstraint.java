@@ -21,28 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
-import org.junit.jupiter.api.Test;
+public class LinuxConstraint<T> extends SpecificConstraint<T> {
 
-import static org.junit.jupiter.api.Assertions.*;
+	public LinuxConstraint(OSConstraint<T> target) {
+		super(target);
+	}
 
-/**
- * Used to quickly and dirtily test features during development.
- */
-public class LazyTesting {
+	public enum Distribution {
 
-	@Test
-	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
-
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
-				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
-				"Did not get correct value!");
-
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
+		DEBIAN, UBUNTU, RED_HAT
 
 	}
 

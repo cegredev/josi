@@ -21,29 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
-import org.junit.jupiter.api.Test;
+import io.github.cegredev.josi.OS;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class WinConstraint<T> extends SpecificConstraint<T> {
 
-/**
- * Used to quickly and dirtily test features during development.
- */
-public class LazyTesting {
+	public WinConstraint(OSConstraint<T> target) {
+		super(target);
+	}
 
-	@Test
-	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
+	public WinConstraint<T> version(OS... oss) {
+		return addToTarget(os -> os.is(oss));
+	}
 
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
-				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
-				"Did not get correct value!");
+	public WinConstraint<T> server(boolean isServer) {
+		// TODO: Actually implement
+		return addToTarget(os -> os.is(OS.WIN_10));
+	}
 
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
+	public enum Version {
+
+		W7, W8, W8_1, W10
 
 	}
+
 
 }

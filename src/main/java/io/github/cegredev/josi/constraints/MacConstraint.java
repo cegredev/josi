@@ -21,29 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
-import org.junit.jupiter.api.Test;
+import io.github.cegredev.josi.OS;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class MacConstraint<T> extends SpecificConstraint<T> {
 
-/**
- * Used to quickly and dirtily test features during development.
- */
-public class LazyTesting {
+	public MacConstraint(OSConstraint<T> target) {
+		super(target);
+	}
 
-	@Test
-	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
+	public MacConstraint<T> vRange(int minMajor, int minMinor, int maxMajor, int maxMinor) {
+		// TODO: Actually implement
+		return addToTarget(os -> os.isFamily(OS.Family.MAC));
+	}
 
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
-				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
-				"Did not get correct value!");
+	public MacConstraint<T> vMin(int minMajor, int minMinor) {
+		// TODO: Actually implement
+		return addToTarget(os -> os.isFamily(OS.Family.MAC));
+	}
 
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
-
+	public MacConstraint<T> vMax(int maxMajor, int maxMinor) {
+		// TODO: Actually implement
+		return addToTarget(os -> os.isFamily(OS.Family.MAC));
 	}
 
 }

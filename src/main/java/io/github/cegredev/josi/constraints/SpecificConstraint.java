@@ -21,29 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
-import org.junit.jupiter.api.Test;
+public class SpecificConstraint<T> {
 
-import static org.junit.jupiter.api.Assertions.*;
+	private final OSConstraint<T> target;
 
-/**
- * Used to quickly and dirtily test features during development.
- */
-public class LazyTesting {
-
-	@Test
-	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
-
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
-				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
-				"Did not get correct value!");
-
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
-
+	public SpecificConstraint(OSConstraint<T> target) {
+		this.target = target;
 	}
 
+	@SuppressWarnings("unchecked")
+	protected <C extends SpecificConstraint<T>> C addToTarget(ConditionChain.Condition condition) {
+		getTarget().addCondition(condition);
+		return (C) this;
+	}
+
+
+	public OSConstraint<T> general() {
+		return getTarget();
+	}
+
+	protected OSConstraint<T> getTarget() {
+		return target;
+	}
 }
