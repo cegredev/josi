@@ -40,11 +40,4 @@ public class WinConstraint<T> extends SpecificConstraint<T> {
 		return addToTarget(os -> os.is(OS.WIN_10));
 	}
 
-	public enum Version {
-
-		W7, W8, W8_1, W10
-
-	}
-
-
 }

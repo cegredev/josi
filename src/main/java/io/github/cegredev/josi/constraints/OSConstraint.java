@@ -27,17 +27,17 @@ import io.github.cegredev.josi.OS;
 import io.github.cegredev.josi.UnsupportedOSException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OSConstraint<T> {
 
-	private final List<ChainDataPair> chainDataPairs = new ArrayList<>();
+	private final List<ChainDataPair> chainDataPairs = new ArrayList<>(Collections.singletonList(new ChainDataPair()));
 
 	private T fallback;
 
 	public OSConstraint(T fallback) {
 		this.fallback = fallback;
-		getChainDataPairs().add(new ChainDataPair());
 	}
 
 	public OSConstraint() {

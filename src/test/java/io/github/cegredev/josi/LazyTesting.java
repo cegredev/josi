@@ -35,14 +35,14 @@ public class LazyTesting {
 
 	@Test
 	public void testAny() {
-		assertFalse(new OSConstraint().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
+		assertFalse(new OSConstraint<>().isFamily(OS.Family.WINDOWS).isNot(OS.WIN_95).check(OS.WIN_95), "");
 
-		assertEquals("Unix", new OSConstraint().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
+		assertEquals("Unix", new OSConstraint<>().isFamily(OS.Family.LINUX, OS.Family.MAC).pick(
 				"Unix").isFamily(OS.Family.WINDOWS).pick("Windows").get(OS.MAC_OS_BIG_SUR),
 				"Did not get correct value!");
 
 		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
+				() -> new OSConstraint<>().isNotFamily(OS.Family.LINUX).enforce(OS.UBUNTU));
 
 	}
 
