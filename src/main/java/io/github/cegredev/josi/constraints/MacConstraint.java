@@ -23,9 +23,11 @@
  */
 package io.github.cegredev.josi.constraints;
 
+import io.github.cegredev.josi.CurrentOS;
+import io.github.cegredev.josi.MacOS;
 import io.github.cegredev.josi.OS;
 
-public class MacConstraint<T> extends SpecificConstraint<T> {
+public class MacConstraint<T> extends SpecificConstraint<MacOS, T> {
 
 	public MacConstraint(OSConstraint<T> target) {
 		super(target);
@@ -33,17 +35,23 @@ public class MacConstraint<T> extends SpecificConstraint<T> {
 
 	public MacConstraint<T> vRange(int minMajor, int minMinor, int maxMajor, int maxMinor) {
 		// TODO: Actually implement
-		return addToTarget(os -> os.isFamily(OS.Family.MAC));
+		return addToTarget(os -> os.getMajor() >= minMajor && os.getMajor() <= maxMajor
+				&& os.getMinor() >= minMinor && os.getMinor() <= maxMinor);
 	}
 
 	public MacConstraint<T> vMin(int minMajor, int minMinor) {
 		// TODO: Actually implement
-		return addToTarget(os -> os.isFamily(OS.Family.MAC));
+		return addToTarget(os -> os.getMajor() >= minMajor && os.getMinor() >= minMinor);
 	}
 
 	public MacConstraint<T> vMax(int maxMajor, int maxMinor) {
 		// TODO: Actually implement
-		return addToTarget(os -> os.isFamily(OS.Family.MAC));
+		return addToTarget(os -> os.getMajor() <= maxMajor && os.getMinor() <= maxMinor);
+	}
+
+	@Override
+	protected CurrentOS.Family getFamily() {
+		return CurrentOS.Family.MAC;
 	}
 
 }

@@ -23,16 +23,24 @@
  */
 package io.github.cegredev.josi.constraints;
 
-public class LinuxConstraint<T> extends SpecificConstraint<T> {
+import io.github.cegredev.josi.CurrentOS;
+import io.github.cegredev.josi.LinuxOS;
+
+import java.util.Arrays;
+
+public class LinuxConstraint<T> extends SpecificConstraint<LinuxOS, T> {
 
 	public LinuxConstraint(OSConstraint<T> target) {
 		super(target);
 	}
 
-	public enum Distribution {
+	public LinuxConstraint<T> distro(LinuxOS.Distribution distros) {
+		return addToTarget(os -> Arrays.asList(distros).contains(os.getDistro()));
+	}
 
-		DEBIAN, UBUNTU, RED_HAT
-
+	@Override
+	protected CurrentOS.Family getFamily() {
+		return CurrentOS.Family.LINUX;
 	}
 
 }

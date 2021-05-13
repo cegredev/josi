@@ -1,3 +1,26 @@
+/*
+ * MIT License
+
+ * Copyright (c) 2021 cegredev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package io.github.cegredev.josi;
 
 import java.io.BufferedReader;
@@ -18,26 +41,26 @@ public class CurrentOS {
 
 		// Decide Windows version
 		if (name.startsWith("win")) {
-			// TODO: Use version here instead of name
+			// TODO: Use version here instead of name. In order to that we'd need a list of what os.version
+			// is on the different Windows versions to be completely sure.
 			int lastSpace = name.lastIndexOf(' ');
 
 			if (lastSpace > -1) {
 				switch (name.substring(lastSpace + 1)) {
 					case "95":
-//						return WIN_95;
 						return new WinOS(WinOS.Version.WIN_95, false);
-//					case "98":
-//						return WIN_98;
-//					case "xp":
-//						return WIN_XP;
-//					case "vista":
-//						return WIN_VISTA;
-//					case "7":
-//						return WIN_7;
+					case "98":
+						return new WinOS(WinOS.Version.WIN_98, false);
+					case "xp":
+						return new WinOS(WinOS.Version.WIN_XP, false);
+					case "vista":
+						return new WinOS(WinOS.Version.WIN_VISTA, false);
+					case "7":
+						return new WinOS(WinOS.Version.WIN_7, false);
 					case "8":
 						return new WinOS(WinOS.Version.WIN_8, false);
-//					case "8.1":
-//						return WIN_8_1;
+					case "8.1":
+						return new WinOS(WinOS.Version.WIN_8_1, false);
 					case "10":
 						return new WinOS(WinOS.Version.WIN_10, false);
 					default:
@@ -58,60 +81,13 @@ public class CurrentOS {
 			int minor = versionSplit.length > 1 ? Integer.parseInt(versionSplit[1]) : -1;
 
 			return new MacOS(major, minor);
-
-//			switch (major) {
-//				case "10":
-//					switch (minor) {
-//						case "0":
-//							return MAC_OSX_CHEETAH;
-//						case "1":
-//							return MAC_OSX_PUMA;
-//						case "2":
-//							return MAC_OSX_JAGUAR;
-//						case "3":
-//							return MAC_OSX_PANTHER;
-//						case "4":
-//							return MAC_OSX_TIGER;
-//						case "5":
-//							return MAC_OSX_LEOPARD;
-//						case "6":
-//							return MAC_OSX_SNOW_LEOPARD;
-//						case "7":
-//							return MAC_OSX_LION;
-//						case "8":
-//							return MAC_OSX_MOUNTAIN_LION;
-//						case "9":
-//							return MAC_OSX_MAVERICKS;
-//						case "10":
-//							return MAC_OSX_YOSEMITE;
-//						case "11":
-//							return MAC_OSX_EL_CAPITAN;
-//						case "12":
-//							return MAC_OS_SIERRA;
-//						case "13":
-//							return MAC_OS_HIGH_SIERRA;
-//						case "14":
-//							return MAC_OS_MOJAVE;
-//						case "15":
-//							return MAC_OS_CATALINA;
-//						case "16":
-//							// Big Sur is macOS version 11.x, but sometimes 10.16 is returned
-//							return MAC_OS_BIG_SUR;
-//						default:
-//							return MAC_UNKNOWN;
-//					}
-//				case "11":
-//					return MAC_OS_BIG_SUR;
-//				default:
-//					return MAC_UNKNOWN;
-//			}
 		}
 
 		// Decide Linux version
 		if (name.contains("nix") || name.contains("nux") || name.contains("aix")) {
 			// If the file does not exist there is nothing more we can achieve
 			if (!osRelease.exists())
-				return new LinuxOS(LinuxOS.Distro.UNKNOWN);
+				return new LinuxOS(LinuxOS.Distribution.UNKNOWN);
 
 			HashMap<String, String> osReleaseMap = new HashMap<>();
 
@@ -137,7 +113,7 @@ public class CurrentOS {
 			} catch (IOException e) {
 				System.err.println("Something went wrong while loading /etc/os-release!");
 				e.printStackTrace();
-				return new LinuxOS(LinuxOS.Distro.UNKNOWN);
+				return new LinuxOS(LinuxOS.Distribution.UNKNOWN);
 			}
 
 			// ID is the computer friendly name of the current Linux distribution
@@ -145,16 +121,16 @@ public class CurrentOS {
 			// ID_LIKE is a list of space-separated IDs of parent distributions
 			String idLike = osReleaseMap.get("ID_LIKE");
 
-			LinuxOS.Distro distro = LinuxOS.Distro.UNKNOWN;
+			LinuxOS.Distribution distro = LinuxOS.Distribution.UNKNOWN;
 			if (id != null)
-				distro = LinuxOS.Distro.fromID(id);
+				distro = LinuxOS.Distribution.fromID(id);
 
-			if (distro == LinuxOS.Distro.UNKNOWN && idLike != null)
+			if (distro == LinuxOS.Distribution.UNKNOWN && idLike != null)
 				for (String parentID : idLike.split(" "))
-					if ((distro = LinuxOS.Distro.fromID(parentID)) != LinuxOS.Distro.UNKNOWN)
+					if ((distro = LinuxOS.Distribution.fromID(parentID)) != LinuxOS.Distribution.UNKNOWN)
 						return new LinuxOS(distro);
 
-			return new LinuxOS(LinuxOS.Distro.UNKNOWN);
+			return new LinuxOS(LinuxOS.Distribution.UNKNOWN);
 		}
 
 		// Others
@@ -163,6 +139,10 @@ public class CurrentOS {
 			return new OtherOS(OtherOS.OS.SOLARIS);
 
 		return new OtherOS(OtherOS.OS.UNKNOWN);
+	}
+
+	public static OperatingSystem get() {
+		return OS;
 	}
 
 	public enum Family {

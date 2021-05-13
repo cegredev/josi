@@ -23,33 +23,28 @@
  */
 package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.OS;
+import io.github.cegredev.josi.OperatingSystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ConditionChain {
 
-	public interface Condition {
+	private final List<Predicate<OperatingSystem>> conditions = new ArrayList<>();
 
-		boolean check(OS operatingSystem);
-
-	}
-
-	private final List<Condition> conditions = new ArrayList<>();
-
-	public boolean add(Condition condition) {
+	public boolean add(Predicate<OperatingSystem> condition) {
 		return getConditions().add(condition);
 	}
 
-	public boolean isTrue(OS operatingSystem) {
-		for (Condition condition : getConditions())
-			if (!condition.check(operatingSystem))
+	public boolean isTrue(OperatingSystem operatingSystem) {
+		for (Predicate<OperatingSystem> condition : getConditions())
+			if (!condition.test(operatingSystem))
 				return false;
 		return true;
 	}
 
-	public List<Condition> getConditions() {
+	public List<Predicate<OperatingSystem>> getConditions() {
 		return conditions;
 	}
 }

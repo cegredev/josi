@@ -23,12 +23,12 @@
  */
 package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.OS;
-import io.github.cegredev.josi.UnsupportedOSException;
+import io.github.cegredev.josi.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class OSConstraint<T> {
 
@@ -44,30 +44,31 @@ public class OSConstraint<T> {
 		this(null);
 	}
 
-	protected OSConstraint<T> addCondition(ConditionChain.Condition condition) {
+	protected OSConstraint<T> addCondition(Predicate<OperatingSystem> condition) {
 		getLastPair().getChain().add(condition);
 		return this;
 	}
 
-	public OSConstraint<T> is(OS... operatingSystems) {
-		return addCondition(os -> os.is(operatingSystems));
-	}
+//	public OSConstraint<T> is(OS... operatingSystems) {
+//		return addCondition(os -> os.is(operatingSystems));
+//	}
+//
+//	public OSConstraint<T> isNot(OS... operatingSystems) {
+//		return addCondition(os -> !os.is(operatingSystems));
+//	}
 
-	public OSConstraint<T> isNot(OS... operatingSystems) {
-		return addCondition(os -> !os.is(operatingSystems));
-	}
-
-	public OSConstraint<T> isFamily(OS.Family... families) {
+	public OSConstraint<T> isFamily(CurrentOS.Family... families) {
 		return addCondition(os -> os.isFamily(families));
 	}
 
-	public OSConstraint<T> isNotFamily(OS.Family... families) {
+	public OSConstraint<T> isNotFamily(CurrentOS.Family... families) {
 		return addCondition(os -> !os.isFamily(families));
 	}
 
-	public OSConstraint<T> atLeast(OS operatingSystem) {
-		return addCondition(os -> os.isAtLeast(operatingSystem));
-	}
+	// TODO: Implement again
+//	public OSConstraint<T> atLeast(OS operatingSystem) {
+//		return addCondition(os -> os.isAtLeast(operatingSystem));
+//	}
 
 	public WinConstraint<T> win() {
 		return new WinConstraint<>(this);
@@ -95,7 +96,7 @@ public class OSConstraint<T> {
 		return this;
 	}
 
-	public boolean check(OS operatingSystem) {
+	public boolean check(OperatingSystem operatingSystem) {
 		for (ChainDataPair pair : getChainDataPairs())
 			if (!pair.getChain().isTrue(operatingSystem))
 				return false;
@@ -103,31 +104,31 @@ public class OSConstraint<T> {
 	}
 
 	public boolean check() {
-		return check(OS.current());
+		return check(CurrentOS.get());
 	}
 
-	public void enforce(OS operatingSystem) throws UnsupportedOSException {
+	public void enforce(OperatingSystem operatingSystem) throws UnsupportedOSException {
 		if (!check(operatingSystem))
 			throw new UnsupportedOSException();
 	}
 
 	public void enforce() throws UnsupportedOSException {
-		enforce(OS.current());
+		enforce(CurrentOS.get());
 	}
 
-	public T get(OS operatingSystem) {
+	public T get(OperatingSystem operatingSystem) {
 		for (ChainDataPair pair : getChainDataPairs())
 			if (pair.getChain().isTrue(operatingSystem))
 				return pair.getData();
 
 		T fallback = getFallback();
 		if (fallback == null)
-			throw new UnsupportedOSException(operatingSystem);
+			throw new NewUnsupportedOSException(operatingSystem);
 		return fallback;
 	}
 
 	public T get() {
-		return get(OS.current());
+		return get(CurrentOS.get());
 	}
 
 	protected ChainDataPair getLastPair() {

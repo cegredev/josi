@@ -23,7 +23,13 @@
  */
 package io.github.cegredev.josi.constraints;
 
-public class SpecificConstraint<T> {
+import io.github.cegredev.josi.CurrentOS;
+import io.github.cegredev.josi.OperatingSystem;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public abstract class SpecificConstraint<O extends OperatingSystem, T> {
 
 	private final OSConstraint<T> target;
 
@@ -32,17 +38,19 @@ public class SpecificConstraint<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <C extends SpecificConstraint<T>> C addToTarget(ConditionChain.Condition condition) {
-		getTarget().addCondition(condition);
+	protected <C extends SpecificConstraint<O, T>> C addToTarget(Predicate<O> condition) {
+		getTarget().addCondition(os -> os.isFamily(getFamily()) && condition.test((O) os));
 		return (C) this;
 	}
-
 
 	public OSConstraint<T> general() {
 		return getTarget();
 	}
 
+	protected abstract CurrentOS.Family getFamily();
+
 	protected OSConstraint<T> getTarget() {
 		return target;
 	}
+
 }

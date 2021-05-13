@@ -1,32 +1,55 @@
+/*
+ * MIT License
+
+ * Copyright (c) 2021 cegredev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package io.github.cegredev.josi;
 
 public class LinuxOS extends OperatingSystem {
 
-	private final Distro distro;
+	private final Distribution distro;
 
-	public LinuxOS(Distro distro) {
+	public LinuxOS(Distribution distro) {
 		super(CurrentOS.Family.LINUX);
 
 		this.distro = distro;
 	}
 
-	public Distro getDistro() {
+	public Distribution getDistro() {
 		return distro;
 	}
 
-	public enum Distro {
+	public enum Distribution {
 
-		DEBIAN(), UBUNTU(), GENTOO(), LINUX_MINT(), RED_HAT_ENTERPRISE_LINUX(), CENTOS(), FEDORA(), ARCH_LINUX(),
+		DEBIAN, UBUNTU, GENTOO, LINUX_MINT, RED_HAT_ENTERPRISE_LINUX, CENTOS, FEDORA, ARCH_LINUX,
 		/**
 		 * Suse/OpenSUSE and any child-distributions.
 		 */
-		SUSE(),
+		SUSE,
 		/**
 		 * An unknown or at least unrecognizable Linux based operating system.
 		 */
-		UNKNOWN();
+		UNKNOWN;
 
-		public static Distro fromID(String id) {
+		public static Distribution fromID(String id) {
 			switch (id) {
 				// All the OSs up to (inclusive) SUSE can be found in this GitHub repo or its forks:
 				// https://gist.github.com/natefoo/814c5bf936922dad97ff

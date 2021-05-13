@@ -23,21 +23,32 @@
  */
 package io.github.cegredev.josi.constraints;
 
-import io.github.cegredev.josi.OS;
+import io.github.cegredev.josi.CurrentOS;
+import io.github.cegredev.josi.WinOS;
 
-public class WinConstraint<T> extends SpecificConstraint<T> {
+import java.util.Arrays;
+
+public class WinConstraint<T> extends SpecificConstraint<WinOS, T> {
 
 	public WinConstraint(OSConstraint<T> target) {
 		super(target);
 	}
 
-	public WinConstraint<T> version(OS... oss) {
-		return addToTarget(os -> os.is(oss));
+	public WinConstraint<T> version(WinOS.Version... versions) {
+		return addToTarget(os -> Arrays.asList(versions).contains(os.getVersion()));
+	}
+
+	public WinConstraint<T> notVersion(WinOS.Version... versions) {
+		return addToTarget(os -> !Arrays.asList(versions).contains(os.getVersion()));
 	}
 
 	public WinConstraint<T> server(boolean isServer) {
-		// TODO: Actually implement
-		return addToTarget(os -> os.is(OS.WIN_10));
+		return addToTarget(os -> os.isServer() == isServer);
+	}
+
+	@Override
+	protected CurrentOS.Family getFamily() {
+		return CurrentOS.Family.WINDOWS;
 	}
 
 }
