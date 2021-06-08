@@ -53,7 +53,8 @@ public class OSNameTests {
 			new MDT(MAC_OSX_EL_CAPITAN, "Mac", "10.11"), new MDT(MAC_OS_SIERRA, "Mac", "10.12"),
 			new MDT(MAC_OS_HIGH_SIERRA, "Mac", "10.13"), new MDT(MAC_OS_MOJAVE, "Mac", "10.14"),
 			new MDT(MAC_OS_CATALINA, "Mac", "10.15"), new MDT(MAC_OS_BIG_SUR, "Mac", "10.16"),
-			new MDT(MAC_OS_BIG_SUR, "Mac OS X", "11.0"), new MDT(MAC_OS_BIG_SUR, "Mac OS X", "11.2.1")};
+			new MDT(MAC_OS_BIG_SUR, "Mac OS X", "11.0"), new MDT(MAC_OS_BIG_SUR, "Mac OS X", "11.2.1"),
+			new MDT(MAC_OS_MONTEREY, "Mac OS X", "12.0"), new MDT(MAC_OS_MONTEREY, "Mac OS X", "10.17")};
 
 	private static final LDT[] LINUX_TESTS = {new LDT(LINUX_UNKNOWN, "unknown"), new LDT(DEBIAN, "debian"),
 			new LDT(UBUNTU, "ubuntu"), new LDT(GENTOO, "gentoo"), new LDT(LINUX_MINT, "linux_mint"),

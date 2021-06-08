@@ -56,6 +56,8 @@ public enum OS {
 	MAC_OSX_TIGER(MAC), MAC_OSX_LEOPARD(MAC), MAC_OSX_SNOW_LEOPARD(MAC), MAC_OSX_LION(MAC),
 	MAC_OSX_MOUNTAIN_LION(MAC), MAC_OSX_MAVERICKS(MAC), MAC_OSX_YOSEMITE(MAC), MAC_OSX_EL_CAPITAN(MAC),
 	MAC_OS_SIERRA(MAC), MAC_OS_HIGH_SIERRA(MAC), MAC_OS_MOJAVE(MAC), MAC_OS_CATALINA(MAC), MAC_OS_BIG_SUR(MAC),
+	MAC_OS_MONTEREY(MAC),
+
 	/**
 	 * An unknown or at least unrecognizable Mac based operating system.
 	 */
@@ -194,11 +196,16 @@ public enum OS {
 						case "16":
 							// Big Sur is macOS version 11.x, but sometimes 10.16 is returned
 							return MAC_OS_BIG_SUR;
+						case "17":
+							// Monterey is macOS version 12.x, but sometimes 10.17 is returned
+							return MAC_OS_MONTEREY;
 						default:
 							return MAC_UNKNOWN;
 					}
 				case "11":
 					return MAC_OS_BIG_SUR;
+				case "12":
+					return MAC_OS_MONTEREY;
 				default:
 					return MAC_UNKNOWN;
 			}
