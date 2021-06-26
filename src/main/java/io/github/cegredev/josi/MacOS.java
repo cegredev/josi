@@ -30,6 +30,8 @@ package io.github.cegredev.josi;
  */
 public class MacOS extends OperatingSystem {
 
+	// The version numbers as indicated by https://en.wikipedia.org/wiki/MacOS#Release_history
+	// FIXME: This is not actually true yet. Make it true. I guess.
 	private final int major;
 	private final int minor;
 
@@ -43,7 +45,7 @@ public class MacOS extends OperatingSystem {
 	public MacOS(String plainName, String plainVersion) {
 		super(plainName, plainVersion, Family.MAC);
 
-		int major = -1, minor = -1;
+		int major = -1, minor = 0;
 
 		char sep = '.';
 		int index = plainVersion.indexOf(sep);
@@ -57,8 +59,28 @@ public class MacOS extends OperatingSystem {
 			}
 		}
 
+		// Sometimes, MacOS versions 11 and 12 (as of June 2021) are reported as 10.16/10.17
+		// by System.getProperty("os.name") which is why we have to do this to achieve the official versioning
+		if (major == 10) {
+			int diff = minor - 15;
+
+			if (diff > 0) {
+				minor = 0;
+				major += diff;
+			}
+		}
+
 		this.major = major;
 		this.minor = minor;
+	}
+
+	public boolean equals(MacOS other) {
+		return this.getMajor() == other.getMajor() && this.getMinor() == other.getMinor();
+	}
+
+	@Override
+	public boolean equals(OperatingSystem other) {
+		return other instanceof MacOS && this.equals((MacOS) other);
 	}
 
 	public int getMinor() {

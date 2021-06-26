@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi;
 
+import java.util.Objects;
+
 /**
  * Represents a Windows based operating system.
  *
@@ -49,6 +51,29 @@ public class WinOS extends OperatingSystem {
 
 		// FIXME: Actually make this check sensible
 		this.server = plainName.contains("server");
+	}
+
+	/**
+	 * Ignores:
+	 * <ul>
+	 *     <li>{@link #getFamily()} since all WinOSs are bound to have the same family.</li>
+	 *     <li>{@link #getPlainName()} since different strings may lead to the same {@link #getVersion() version}.</li>
+	 *     <li>
+	 *         {@link #getPlainVersion()} since different strings may lead to the same {@link #getVersion() version}.
+	 *     </li>
+	 * </ul>
+	 *
+	 * @param other The {@link WinOS} to check against.
+	 * @return Whether the operating systems are equal to each other.
+	 */
+	public boolean equals(WinOS other) {
+		return this.isServer() == other.isServer()
+				&& Objects.equals(this.getVersion(), other.getVersion());
+	}
+
+	@Override
+	public boolean equals(OperatingSystem other) {
+		return other instanceof WinOS && this.equals((WinOS) other);
 	}
 
 	public Version getVersion() {

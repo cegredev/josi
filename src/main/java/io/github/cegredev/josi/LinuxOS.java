@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a Linux based operating system.
@@ -77,7 +78,7 @@ public class LinuxOS extends OperatingSystem {
 					osReleaseMap.put(key, value);
 				}
 			} catch (IOException e) {
-				System.err.println("Something went wrong while loading /etc/os-release!");
+				System.err.println("Something went wrong while loading \"" + osRelease.getAbsolutePath() + "\"!");
 				e.printStackTrace();
 			}
 
@@ -102,6 +103,16 @@ public class LinuxOS extends OperatingSystem {
 			this.osReleaseMap = Collections.unmodifiableMap(new HashMap<>());
 			this.distro = Distribution.UNKNOWN;
 		}
+	}
+
+	public boolean equals(LinuxOS other) {
+		// TODO: Figure out what of osReleaseMap to include here
+		return Objects.equals(this.getDistro(), other.getDistro());
+	}
+
+	@Override
+	public boolean equals(OperatingSystem other) {
+		return other instanceof LinuxOS && this.equals((LinuxOS) other);
 	}
 
 	public Distribution getDistro() {

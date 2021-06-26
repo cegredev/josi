@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi;
 
+import java.util.Objects;
+
 /**
  * Represents any operating system that is not Windows, Mac or Linux based.
  *
@@ -44,6 +46,15 @@ public class OtherOS extends OperatingSystem {
 
 	public OS getOS() {
 		return os;
+	}
+
+	public boolean equals(OtherOS other) {
+		return Objects.equals(this.getOS(), other.getOS());
+	}
+
+	@Override
+	public boolean equals(OperatingSystem other) {
+		return other instanceof OtherOS && this.equals((OtherOS) other);
 	}
 
 	public enum OS {

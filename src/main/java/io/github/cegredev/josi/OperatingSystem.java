@@ -24,6 +24,7 @@
 package io.github.cegredev.josi;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Represents a specific instance of an operating system with access to every last bit of information.
@@ -54,7 +55,21 @@ public abstract class OperatingSystem {
 	}
 
 	public boolean isFamily(Family... families) {
-		return Arrays.asList(families).contains(getFamily());
+		for (Family family : families)
+			if (family.equals(this.getFamily()))
+				return true;
+		return false;
+	}
+
+	public boolean equals(OperatingSystem other) {
+		return Objects.equals(this.getFamily(), other.getFamily())
+				&& Objects.equals(this.getPlainName(), other.getPlainName())
+				&& Objects.equals(this.getPlainVersion(), other.getPlainVersion());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof OperatingSystem && this.equals((OperatingSystem) other);
 	}
 
 	public Family getFamily() {
