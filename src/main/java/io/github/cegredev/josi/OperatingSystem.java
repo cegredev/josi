@@ -25,19 +25,58 @@ package io.github.cegredev.josi;
 
 import java.util.Arrays;
 
+/**
+ * Represents a specific instance of an operating system with access to every last bit of information.
+ *
+ * @author cegredev
+ */
 public abstract class OperatingSystem {
 
-	private final CurrentOS.Family family;
+	/**
+	 * The name provided by something like {@code System.getProperty("os.name")}.
+	 */
+	private final String plainName;
 
-	public OperatingSystem(CurrentOS.Family family) {
+	/**
+	 * The version provided by something like {@code System.getProperty("os.version")}.
+	 */
+	private final String plainVersion;
+
+	/**
+	 * The family of the operating system.
+	 */
+	private final Family family;
+
+	protected OperatingSystem(String plainName, String plainVersion, Family family) {
+		this.plainName = plainName;
+		this.plainVersion = plainVersion;
 		this.family = family;
 	}
 
-	public boolean isFamily(CurrentOS.Family... families) {
+	public boolean isFamily(Family... families) {
 		return Arrays.asList(families).contains(getFamily());
 	}
 
-	public CurrentOS.Family getFamily() {
+	public Family getFamily() {
 		return family;
+	}
+
+	public String getPlainName() {
+		return plainName;
+	}
+
+	public String getPlainVersion() {
+		return plainVersion;
+	}
+
+	@Override
+	public String toString() {
+		return "OS[family=" + getFamily() + ",name=" + getPlainName() + ",version=" + getPlainVersion() + "]";
+	}
+
+	public enum Family {
+
+		WINDOWS, MAC, LINUX, OTHER
+
 	}
 }

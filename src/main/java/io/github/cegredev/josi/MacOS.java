@@ -23,13 +23,39 @@
  */
 package io.github.cegredev.josi;
 
+/**
+ * Represents a Mac based operating system.
+ *
+ * @author cegredev
+ */
 public class MacOS extends OperatingSystem {
 
 	private final int major;
 	private final int minor;
 
-	public MacOS(int major, int minor) {
-		super(CurrentOS.Family.MAC);
+	public MacOS(String plainName, String plainVersion, int major, int minor) {
+		super(plainName, plainVersion, Family.MAC);
+
+		this.major = major;
+		this.minor = minor;
+	}
+
+	public MacOS(String plainName, String plainVersion) {
+		super(plainName, plainVersion, Family.MAC);
+
+		int major = -1, minor = -1;
+
+		char sep = '.';
+		int index = plainVersion.indexOf(sep);
+		if (index >= 1) {
+			major = Integer.parseInt(plainVersion.substring(0, index));
+
+			int prevIndex = index;
+			index = plainVersion.indexOf(sep, index + 1);
+			if (index >= 1) {
+				minor = Integer.parseInt(plainVersion.substring(prevIndex + 1, index));
+			}
+		}
 
 		this.major = major;
 		this.minor = minor;

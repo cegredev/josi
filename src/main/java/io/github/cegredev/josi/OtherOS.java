@@ -23,14 +23,23 @@
  */
 package io.github.cegredev.josi;
 
+/**
+ * Represents any operating system that is not Windows, Mac or Linux based.
+ *
+ * @author cegredev
+ */
 public class OtherOS extends OperatingSystem {
 
 	private final OS os;
 
-	public OtherOS(OS os) {
-		super(CurrentOS.Family.OTHER);
+	public OtherOS(String plainName, String plainVersion, OS os) {
+		super(plainName, plainVersion, Family.OTHER);
 
 		this.os = os;
+	}
+
+	public OtherOS(String plainName, String plainVersion) {
+		this(plainName, plainVersion, OS.fromString(plainName));
 	}
 
 	public OS getOS() {
@@ -42,11 +51,18 @@ public class OtherOS extends OperatingSystem {
 		/**
 		 * The Solaris operating system.
 		 */
-		SOLARIS(),
+		SOLARIS,
 		/**
 		 * An operating system that cannot be classified.
 		 */
-		UNKNOWN()
+		UNKNOWN;
+
+		public static OS fromString(String name) {
+			if (name.contains("sunos"))
+				return SOLARIS;
+
+			return UNKNOWN;
+		}
 
 	}
 

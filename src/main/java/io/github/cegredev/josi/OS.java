@@ -36,7 +36,9 @@ import static io.github.cegredev.josi.OS.Family.*;
  * utility methods to help deal with different operating systems.
  *
  * @author cegredev
+ * @deprecated Soon to be replaced by a better system or reworked.
  */
+@Deprecated
 public enum OS {
 
 	// I'm aware some of these windows version might be overkill, but they were included in this answer:

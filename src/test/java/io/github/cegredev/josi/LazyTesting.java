@@ -23,7 +23,6 @@
  */
 package io.github.cegredev.josi;
 
-import io.github.cegredev.josi.constraints.OSConstraint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,15 +34,6 @@ public class LazyTesting {
 
 	@Test
 	public void testAny() {
-		assertFalse(new OSConstraint<>().isFamily(CurrentOS.Family.WINDOWS).win().notVersion(WinOS.Version.WIN_95).general()
-				.check(new WinOS(WinOS.Version.WIN_95, false)), "");
-
-		assertEquals("Unix", new OSConstraint<>().isFamily(CurrentOS.Family.LINUX, CurrentOS.Family.MAC).pick(
-				"Unix").isFamily(CurrentOS.Family.WINDOWS).pick("Windows").get(new MacOS(11, 0)),
-				"Did not get correct value!");
-
-		assertThrows(UnsupportedOSException.class,
-				() -> new OSConstraint<>().isNotFamily(CurrentOS.Family.LINUX).enforce(new LinuxOS(LinuxOS.Distribution.UBUNTU)));
 
 	}
 
