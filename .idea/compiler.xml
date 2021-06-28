@@ -10,8 +10,5 @@
         <module name="jos" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Josi" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
