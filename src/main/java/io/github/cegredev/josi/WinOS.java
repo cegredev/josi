@@ -76,6 +76,11 @@ public class WinOS extends OperatingSystem {
 		return other instanceof WinOS && this.equals((WinOS) other);
 	}
 
+	@Override
+	public String toString() {
+		return getVersion() + " " + isServer();
+	}
+
 	public Version getVersion() {
 		return version;
 	}

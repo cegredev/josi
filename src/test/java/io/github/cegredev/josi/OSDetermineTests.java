@@ -18,7 +18,7 @@ public class OSDetermineTests {
 	public void testWinDetermine() {
 		for (WDT test : WIN_TESTS)
 			assertEquals(new WinOS(test.name, test.version, test.expectedVersion, test.server),
-					CurrentOS.determine(test.name, test.version, null), MESSAGE);
+					OS.determine(test.name, test.version, null), MESSAGE);
 	}
 
 	private static class WDT {

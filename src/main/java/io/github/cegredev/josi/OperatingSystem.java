@@ -23,7 +23,6 @@
  */
 package io.github.cegredev.josi;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**

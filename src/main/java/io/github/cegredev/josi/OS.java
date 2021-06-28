@@ -24,45 +24,34 @@
 package io.github.cegredev.josi;
 
 import java.io.File;
-import java.util.Locale;
 
 /**
  * Contains the current {@link OperatingSystem}.
  *
  * @author cegredev
  */
-public final class CurrentOS {
+public final class OS {
 
-	private static final OperatingSystem OS = determine(System.getProperty("os.name"),
+	private static final OperatingSystem OS = determine(OSFamily.NAME_LOWER,
 			System.getProperty("os.version"), new File("/etc/os-release"));
 
 	/**
 	 * No need to instantiate this class.
 	 */
-	private CurrentOS() {
+	private OS() {
 	}
 
-	static OperatingSystem determine(String name, String version, File osRelease) {
-		// Locale.ROOT prevents funny locale stuff from happening during toLowerCase
-		name = name.toLowerCase(Locale.ROOT).trim();
-
-		if (name.startsWith("win")) {
-			return new WinOS(name, version);
+	private static OperatingSystem determine(String name, String version, File osRelease) {
+		switch (OSFamily.current()) {
+			case WINDOWS:
+				return new WinOS(name, version);
+			case MAC:
+				return new MacOS(name, version);
+			case LINUX:
+				return new LinuxOS(name, version, osRelease);
+			default:
+				return new OtherOS(name, version);
 		}
-
-		if (name.startsWith("mac")) {
-			return new MacOS(name, version);
-		}
-
-		if (name.contains("nix") || name.contains("nux") || name.contains("aix")) {
-			return new LinuxOS(name, version, osRelease);
-		}
-
-		// Others
-		if (name.contains("sunos"))
-			return new OtherOS(name, version, OtherOS.OS.SOLARIS);
-
-		return new OtherOS(name, version, OtherOS.OS.UNKNOWN);
 	}
 
 	public static OperatingSystem get() {

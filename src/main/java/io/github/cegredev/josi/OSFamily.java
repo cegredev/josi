@@ -37,9 +37,15 @@ public enum OSFamily {
 	WINDOWS, MAC, LINUX, UNKNOWN;
 
 	/**
+	 * The name of this operating system as reported by {@code System.getProperty("os.name")} in lowercase.
+	 */
+	// Locale.ROOT prevents funny locale stuff from happening
+	public static final String NAME_LOWER = System.getProperty("os.name").toLowerCase(Locale.ROOT).trim();
+
+	/**
 	 * The operating system family running on the current PC.
 	 */
-	private static final OSFamily CURRENT = determine(System.getProperty("os.name"));
+	private static final OSFamily CURRENT = determine(NAME_LOWER);
 
 	/**
 	 * Tries to recognize and map a given name and version to the right OS. Is package-private for tests.
@@ -49,9 +55,6 @@ public enum OSFamily {
 	 * @return A family matching the given name or other if the name can not be recognized.
 	 */
 	static OSFamily determine(String name) {
-		// Locale.ROOT prevents funny locale stuff from happening
-		name = name.toLowerCase(Locale.ROOT).trim();
-
 		if (name.startsWith("win"))
 			return WINDOWS;
 
