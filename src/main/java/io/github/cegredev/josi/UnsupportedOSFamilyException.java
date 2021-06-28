@@ -23,21 +23,25 @@
  */
 package io.github.cegredev.josi;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * Tests only concerning the {@link OS.Family} enum.
+ * Thrown when a given {@link OSFamily} is not supported.
+ *
+ * @author cegredev
  */
-public class OSFamilyTests {
+public class UnsupportedOSFamilyException extends RuntimeException {
 
-	@Test
-	public void testRepresentativeOfSameFamily() {
-		for (OS.Family family : OS.Family.values()) {
-			assertEquals(family, family.getRepresentative().getFamily(),
-					"Family had a representative of the wrong family!");
-		}
+	/**
+	 * @param os The operating system that is not supported.
+	 */
+	public UnsupportedOSFamilyException(OSFamily os) {
+		super("The operating system " + os + " is not supported!");
+	}
+
+	/**
+	 * Uses the {@link OSFamily#current() current} operating system as the OS value.
+	 */
+	public UnsupportedOSFamilyException() {
+		this(OSFamily.current());
 	}
 
 }

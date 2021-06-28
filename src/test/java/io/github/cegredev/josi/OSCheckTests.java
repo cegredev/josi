@@ -35,46 +35,8 @@ public class OSCheckTests {
 	@Test
 	public void testIsOS() {
 		String message = "OS was not recognized!";
-		assertTrue(OS.WIN_10.is(OS.WIN_95, OS.WIN_10, OS.MAC_UNKNOWN), message);
-		assertFalse(OS.WIN_8.is(OS.WIN_95, OS.WIN_10, OS.MAC_UNKNOWN), message);
-	}
-
-	@Test
-	public void testIsAtLeastOS() {
-		String message = "OS was not recognized!";
-		assertTrue(OS.WIN_10.isAtLeast(OS.WIN_95), message);
-		assertTrue(OS.WIN_7.isAtLeast(OS.WIN_7), message);
-		assertFalse(OS.WIN_8.isAtLeast(OS.WIN_10), message);
-		assertTrue(OS.MAC_OS_BIG_SUR.isAtLeast(OS.MAC_OS_SIERRA), message);
-		assertTrue(OS.MAC_OS_CATALINA.isAtLeast(OS.MAC_OS_CATALINA), message);
-		assertFalse(OS.MAC_OSX_LION.isAtLeast(OS.MAC_OSX_MOUNTAIN_LION), message);
-		assertTrue(OS.UBUNTU.isAtLeast(OS.UBUNTU), message);
-		assertFalse(OS.UBUNTU.isAtLeast(OS.DEBIAN), message);
-		assertFalse(OS.DEBIAN.isAtLeast(OS.UBUNTU), message);
-
-		assertFalse(OS.WIN_10.isAtLeast(OS.MAC_OS_SIERRA), message);
-		assertFalse(OS.MAC_OS_BIG_SUR.isAtLeast(OS.WIN_7), message);
-	}
-
-	@Test
-	public void testIsFamily() {
-		String message = "OS family was not recognized!";
-		assertTrue(OS.WIN_10.isFamily(OS.Family.WINDOWS, OS.Family.MAC), message);
-		assertFalse(OS.MAC_UNKNOWN.isFamily(OS.Family.LINUX, OS.Family.OTHER), message);
-	}
-
-	@Test
-	public void enforceIsAtLeastOS() {
-		String threwMessage = "Threw even though OS was allowed!",
-			notThrowMessage = "Did not throw even though OS was not allowed!";
-
-		assertThrows(UnsupportedOSException.class, () -> OS.WIN_10.enforceAtLeast(OS.MAC_OS_SIERRA),
-			notThrowMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_OS_BIG_SUR.enforceAtLeast(OS.WIN_7),
-			notThrowMessage);
-		assertDoesNotThrow(() -> OS.UBUNTU.enforceAtLeast(OS.UBUNTU), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.UNKNOWN.enforceAtLeast(OS.UNKNOWN),
-			notThrowMessage);
+		assertTrue(OSFamily.WINDOWS.is(OSFamily.MAC, OSFamily.WINDOWS, OSFamily.UNKNOWN), message);
+		assertFalse(OSFamily.WINDOWS.is(OSFamily.MAC, OSFamily.LINUX), message);
 	}
 
 	@Test
@@ -82,25 +44,12 @@ public class OSCheckTests {
 		String threwMessage = "Threw even though OS was allowed!",
 				notThrowMessage = "Did not throw even though OS was not allowed!";
 
-		assertDoesNotThrow(() -> OS.WIN_10.enforce(OS.WIN_95, OS.WIN_10), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforce(OS.WIN_8, OS.LINUX_UNKNOWN),
+		assertDoesNotThrow(() -> OSFamily.WINDOWS.enforce(OSFamily.WINDOWS), threwMessage);
+		assertThrows(UnsupportedOSFamilyException.class, () -> OSFamily.MAC.enforce(OSFamily.WINDOWS, OSFamily.LINUX),
 				notThrowMessage);
-		assertDoesNotThrow(() -> OS.LINUX_UNKNOWN.enforceNot(OS.WIN_10, OS.MAC_UNKNOWN), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNot(OS.MAC_UNKNOWN, OS.LINUX_UNKNOWN),
+		assertDoesNotThrow(() -> OSFamily.LINUX.enforceNot(OSFamily.WINDOWS, OSFamily.MAC), threwMessage);
+		assertThrows(UnsupportedOSFamilyException.class, () -> OSFamily.MAC.enforceNot(OSFamily.LINUX, OSFamily.MAC),
 				notThrowMessage);
-	}
-
-	@Test
-	public void testEnforceFamily() {
-		String threwMessage = "Threw even though OS family was allowed!",
-				notThrowMessage = "Did not throw even though OS family was not allowed!";
-
-		assertDoesNotThrow(() -> OS.WIN_10.enforceFamily(OS.Family.WINDOWS, OS.Family.LINUX), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.LINUX_UNKNOWN.enforceFamily(OS.Family.MAC, OS.Family.OTHER),
-				notThrowMessage);
-		assertDoesNotThrow(() -> OS.WIN_10.enforceNotFamily(OS.Family.MAC, OS.Family.LINUX), threwMessage);
-		assertThrows(UnsupportedOSException.class, () -> OS.MAC_UNKNOWN.enforceNotFamily(OS.Family.MAC,
-				OS.Family.OTHER), notThrowMessage);
 	}
 
 }

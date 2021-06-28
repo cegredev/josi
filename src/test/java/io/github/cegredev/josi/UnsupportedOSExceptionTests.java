@@ -28,18 +28,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * "Tests" {@link UnsupportedOSException}. This is really just here for the coverage.
+ * "Tests" {@link UnsupportedOSFamilyException}. This is really just here for the coverage.
  */
 public class UnsupportedOSExceptionTests {
 
 	@Test
 	public void testIncludesOSName() {
-		assertTrue(new UnsupportedOSException(OS.WIN_7).getMessage().contains(OS.WIN_7.toString()));
+		// This is... Interesting. I mean it does what the test name suggests but should there really be a test for it?
+		// Gotta get that 100% coverage I guess o.O
+		assertTrue(new UnsupportedOSFamilyException(OSFamily.WINDOWS).getMessage().contains(OSFamily.WINDOWS.toString()));
 	}
 
 	@Test
 	public void testUsesCurrent() {
-		assertTrue(new UnsupportedOSException().getMessage().contains(OS.current().toString()));
+		assertTrue(new UnsupportedOSFamilyException().getMessage().contains(OSFamily.current().toString()));
 	}
 
 }

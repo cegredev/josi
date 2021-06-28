@@ -23,7 +23,7 @@
  */
 package main;
 
-import io.github.cegredev.josi.OS;
+import io.github.cegredev.josi.OSFamily;
 
 /**
  * Examples of how to check and enforce the current operating system.
@@ -34,22 +34,22 @@ public class CheckCurrentOperatingSystem {
 
 	public static void checkIfOperatingSystemIsTheDesiredOne() {
 		// Checks whether the OS is any of the given ones
-		boolean isHated = OS.current().is(OS.WIN_8, OS.WIN_8_1);
+		boolean isHated = OSFamily.current().is(OSFamily.WIN_8, OSFamily.WIN_8_1);
 
 		// Checks whether the OS is part of the given families
-		boolean isUnixBased = OS.current().isFamily(OS.Family.MAC, OS.Family.LINUX);
+		boolean isUnixBased = OSFamily.current().isFamily(OSFamily.Family.MAC, OSFamily.Family.LINUX);
 	}
 
 	public static void enforceSpecificOperatingSystem() {
 		// Throws an exception if the operating system is one of the given ones
-		OS.current().enforceNot(OS.WIN_95, OS.WIN_98, OS.WIN_VISTA);
+		OSFamily.current().enforceNot(OSFamily.WIN_95, OSFamily.WIN_98, OSFamily.WIN_VISTA);
 
 		// Throws an exception if the operating system family is not part of the given ones
-		OS.current().enforceFamily(OS.Family.WINDOWS, OS.Family.MAC);
+		OSFamily.current().enforceFamily(OSFamily.Family.WINDOWS, OSFamily.Family.MAC);
 
 		// Only returns the value if the current operating system is Windows, otherwise throws an exception.
 		// Useful for oneliners, where you want to assign a value and check for the OS in the same step
-		boolean gamer = OS.current().pickWindows(true);
+		boolean gamer = OSFamily.current().pickWindows(true);
 	}
 
 }

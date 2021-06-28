@@ -26,7 +26,7 @@ package io.github.cegredev.josi;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static io.github.cegredev.josi.OS.Family.*;
+import static io.github.cegredev.josi.OSFamily.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,40 +34,40 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Tests concerning the different pick-themed utility methods in {@link OS}.
+ * Tests concerning the different pick-themed utility methods in {@link OSFamily}.
  */
 public class OSPickTests {
 
-	private static final OS.Family[] ALL_FAMILIES = OS.Family.values();
+	private static final OSFamily[] ALL_FAMILIES = OSFamily.values();
 
 	/**
 	 * @return The remaining families not covered by the given array.
 	 */
-	private static OS.Family[] getRemainingFamilies(OS.Family... covered) {
-		List<OS.Family> list = new ArrayList<>(Arrays.asList(ALL_FAMILIES));
+	private static OSFamily[] getRemainingFamilies(OSFamily... covered) {
+		List<OSFamily> list = new ArrayList<>(Arrays.asList(ALL_FAMILIES));
 		list.removeAll(Arrays.asList(covered));
-		return list.toArray(new OS.Family[0]);
+		return list.toArray(new OSFamily[0]);
 	}
 
-	private static void pickHelper(Function<OS, Integer> test, OS.Family... families) {
+	private static void pickHelper(Function<OSFamily, Integer> test, OSFamily... families) {
 		for (int i = 0; i < families.length; i++)
-			assertEquals(i, test.apply(families[i].getRepresentative()),
+			assertEquals(i, test.apply(families[i]),
 					"OS did not pick correct value!");
 
-		for (OS.Family family : getRemainingFamilies(families))
-			assertThrows(UnsupportedOSException.class, () -> test.apply(family.getRepresentative()),
+		for (OSFamily family : getRemainingFamilies(families))
+			assertThrows(UnsupportedOSFamilyException.class, () -> test.apply(family),
 					"Did not throw exception even though there was no value for the given OS!");
 	}
 
-	private static void pickAnyHelper(Function<OS, Integer> test, int... expectedValues) {
+	private static void pickAnyHelper(Function<OSFamily, Integer> test, int... expectedValues) {
 		// A little safety measurement to ensure that no one writes a broken test by accident
 		if (expectedValues.length != 4)
 			throw new AssertionError("BAD TEST! The expectedValues array has to have exactly 4 elements!");
 
-		OS.Family[] families = OS.Family.values();
+		OSFamily[] families = OSFamily.values();
 
 		for (int i = 0; i < families.length; i++) {
-			assertEquals(expectedValues[i], test.apply(families[i].getRepresentative()),
+			assertEquals(expectedValues[i], test.apply(families[i]),
 					"OS did not pick correct value!");
 		}
 	}
@@ -79,7 +79,7 @@ public class OSPickTests {
 		// Additionally, the method has to throw an exception if it is called on one of the not present OSs
 		// which is why we give it that changing array of families.
 
-		pickHelper(os -> os.pick(0, 1, 2, 3), WINDOWS, MAC, LINUX, OTHER);
+		pickHelper(os -> os.pick(0, 1, 2, 3), WINDOWS, MAC, LINUX, UNKNOWN);
 		pickHelper(os -> os.pick(0, 1, 2), WINDOWS, MAC, LINUX);
 		pickHelper(os -> os.pickWinMac(0, 1), WINDOWS, MAC);
 		pickHelper(os -> os.pickWinLinux(0, 1), WINDOWS, LINUX);

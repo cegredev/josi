@@ -23,19 +23,19 @@
  */
 package main;
 
-import io.github.cegredev.josi.OS;
+import io.github.cegredev.josi.OSFamily;
 
 public class HowsItWork {
 
 	public static void likeThis() {
 		// The io.github.cegredev.josi.OS enum is the heart of the library. It contains the current operating system:
-		OS os = OS.current();
+		OSFamily os = OSFamily.current();
 		// ...which can be anything from WIN_95 to WIN_10 to any Mac version to a Linux based system. This is as
 		// specific as it gets for this library.
 
 		// The more useful information is the *family* of the operating system, i.e. Windows, Mac, Linux or Other
 		// You can get it like this:
-		OS.Family family = os.getFamily();
+		OSFamily.Family family = os.getFamily();
 
 		// ...and the use it to execute code based on it:
 		switch (family) {
