@@ -92,21 +92,29 @@ public class WinOS extends OperatingSystem {
 			int lastSpace = name.lastIndexOf(' ');
 
 			if (lastSpace > -1) {
-				return switch (name.substring(lastSpace + 1)) {
-					case "95" -> WIN_95;
-					case "98" -> WIN_98;
-					case "xp" -> WIN_XP;
-					case "vista" -> WIN_VISTA;
-					case "7" -> WIN_7;
-					case "8" -> WIN_8;
-					case "8.1" -> WIN_8_1;
-					case "10" -> WIN_10;
-					case "11" -> WIN_11;
-					default -> UNKNOWN;
-				};
-			} else {
-				return UNKNOWN;
+				switch (name.substring(lastSpace + 1)) {
+					case "95":
+						return WIN_95;
+					case "98":
+						return WIN_98;
+					case "xp":
+						return WIN_XP;
+					case "vista":
+						return WIN_VISTA;
+					case "7":
+						return WIN_7;
+					case "8":
+						return WIN_8;
+					case "8.1":
+						return WIN_8_1;
+					case "10":
+						return WIN_10;
+					case "11":
+						return WIN_11;
+				}
 			}
+
+			return UNKNOWN;
 		}
 	}
 
