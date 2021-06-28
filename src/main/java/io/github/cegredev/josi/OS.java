@@ -41,7 +41,7 @@ public final class OS {
 	private OS() {
 	}
 
-	private static OperatingSystem determine(String name, String version, File osRelease) {
+	static OperatingSystem determine(String name, String version, File osRelease) {
 		switch (OSFamily.current()) {
 			case WINDOWS:
 				return new WinOS(name, version);
