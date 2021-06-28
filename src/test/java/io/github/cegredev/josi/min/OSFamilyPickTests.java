@@ -23,8 +23,6 @@
  */
 package io.github.cegredev.josi.min;
 
-import io.github.cegredev.josi.min.OSFamily;
-import io.github.cegredev.josi.min.UnsupportedOSFamilyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

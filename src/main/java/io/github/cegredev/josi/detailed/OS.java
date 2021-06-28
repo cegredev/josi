@@ -53,7 +53,7 @@ public final class OS {
 	 * @param version   The version to determine the operating system from. Expects values in the format of {@code
 	 *                  System.getProperty("os.version")}.
 	 * @param osRelease "/etc/os-release" on Linux systems: contains important information about the OS.
-	 * @return
+	 * @return An operating system matching the given values.
 	 */
 	static OperatingSystem determine(OSFamily family, String name, String version, File osRelease) {
 		switch (family) {
