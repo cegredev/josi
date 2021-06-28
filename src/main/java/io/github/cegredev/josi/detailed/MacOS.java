@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.min.OSFamily;
+
 /**
  * Represents a Mac based operating system.
  *
@@ -30,22 +32,23 @@ package io.github.cegredev.josi.detailed;
  */
 public class MacOS extends OperatingSystem {
 
+	public static final int UNKNOWN_MAJOR = -1;
+
 	// The version numbers as indicated by https://en.wikipedia.org/wiki/MacOS#Release_history
-	// FIXME: This is not actually true yet. Make it true. I guess.
 	private final int major;
 	private final int minor;
 
-	public MacOS(String plainName, String plainVersion, int major, int minor) {
-		super(plainName, plainVersion, Family.MAC);
+	public MacOS(int major, int minor) {
+		super(OSFamily.MAC);
 
 		this.major = major;
 		this.minor = minor;
 	}
 
-	public MacOS(String plainName, String plainVersion) {
-		super(plainName, plainVersion, Family.MAC);
+	public MacOS(String plainVersion) {
+		super(OSFamily.MAC);
 
-		int major = -1, minor = 0;
+		int major = UNKNOWN_MAJOR, minor = 0;
 
 		char sep = '.';
 		int index = plainVersion.indexOf(sep);
@@ -54,19 +57,22 @@ public class MacOS extends OperatingSystem {
 
 			int prevIndex = index;
 			index = plainVersion.indexOf(sep, index + 1);
-			if (index >= 1) {
+			if (index > -1)
 				minor = Integer.parseInt(plainVersion.substring(prevIndex + 1, index));
-			}
+			else if (plainVersion.length() > prevIndex + 1)
+				minor = Integer.parseInt(plainVersion.substring(prevIndex + 1));
+		} else if (plainVersion.length() > 0) {
+			major = Integer.parseInt(plainVersion);
 		}
 
 		// Sometimes, MacOS versions 11 and 12 (as of June 2021) are reported as 10.16/10.17
 		// by System.getProperty("os.name") which is why we have to do this to achieve the official versioning
 		if (major == 10) {
-			int diff = minor - 15;
+			int surplus = minor - 15;
 
-			if (diff > 0) {
+			if (surplus > 0) {
 				minor = 0;
-				major += diff;
+				major += surplus;
 			}
 		}
 
@@ -81,6 +87,12 @@ public class MacOS extends OperatingSystem {
 	@Override
 	public boolean equals(OperatingSystem other) {
 		return other instanceof MacOS && this.equals((MacOS) other);
+	}
+
+	@Override
+	public String toString() {
+		int major = getMajor();
+		return "MAC[" + (major == UNKNOWN_MAJOR ? "?" : major) + "." + getMinor() + "]";
 	}
 
 	public int getMinor() {

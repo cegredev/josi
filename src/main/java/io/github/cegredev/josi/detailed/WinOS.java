@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.min.OSFamily;
+
 import java.util.Objects;
 
 /**
@@ -33,42 +35,33 @@ import java.util.Objects;
 public class WinOS extends OperatingSystem {
 
 	private final boolean server;
-	private final Version version;
+	private final Release release;
 
-	public WinOS(String plainName, String plainVersion, Version version, boolean server) {
-		super(plainName, plainVersion, Family.WINDOWS);
+	public WinOS(Release release, boolean server) {
+		super(OSFamily.WINDOWS);
 
-		this.version = version;
+		this.release = release;
 		this.server = server;
 	}
 
-	public WinOS(String plainName, String plainVersion) {
-		super(plainName, plainVersion, Family.WINDOWS);
+	public WinOS(String plainName) {
+		super(OSFamily.WINDOWS);
 
 		// TODO: Use version here instead of name. In order to that we'd need a list of what os.version
 		// is on the different Windows versions to be completely sure.
-		this.version = Version.fromString(plainName);
+		this.release = Release.fromString(plainName);
 
 		// FIXME: Actually make this check sensible
 		this.server = plainName.contains("server");
 	}
 
 	/**
-	 * Ignores:
-	 * <ul>
-	 *     <li>{@link #getFamily()} since all WinOSs are bound to have the same family.</li>
-	 *     <li>{@link #getPlainName()} since different strings may lead to the same {@link #getVersion() version}.</li>
-	 *     <li>
-	 *         {@link #getPlainVersion()} since different strings may lead to the same {@link #getVersion() version}.
-	 *     </li>
-	 * </ul>
-	 *
 	 * @param other The {@link WinOS} to check against.
 	 * @return Whether the operating systems are equal to each other.
 	 */
 	public boolean equals(WinOS other) {
 		return this.isServer() == other.isServer()
-				&& Objects.equals(this.getVersion(), other.getVersion());
+				&& Objects.equals(this.getRelease(), other.getRelease());
 	}
 
 	@Override
@@ -76,19 +69,27 @@ public class WinOS extends OperatingSystem {
 		return other instanceof WinOS && this.equals((WinOS) other);
 	}
 
-	public Version getVersion() {
-		return version;
+	@Override
+	public String toString() {
+		return "WINDOWS[" + getRelease() + (isServer() ? "+server" : "") + "]";
+	}
+
+	public Release getRelease() {
+		return release;
 	}
 
 	public boolean isServer() {
 		return server;
 	}
 
-	public enum Version {
+	/**
+	 * A list of possible Windows releases/versions.
+	 */
+	public enum Release {
 
 		WIN_95, WIN_98, WIN_XP, WIN_VISTA, WIN_7, WIN_8, WIN_8_1, WIN_10, WIN_11, UNKNOWN;
 
-		public static Version fromString(String name) {
+		public static Release fromString(String name) {
 			int lastSpace = name.lastIndexOf(' ');
 
 			if (lastSpace > -1) {

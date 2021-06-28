@@ -1,13 +1,10 @@
 package io.github.cegredev.josi.detailed;
 
-import io.github.cegredev.josi.detailed.LinuxOS;
-import io.github.cegredev.josi.detailed.OtherOS;
-import io.github.cegredev.josi.detailed.WinOS;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static io.github.cegredev.josi.detailed.WinOS.Version.*;
+import static io.github.cegredev.josi.detailed.WinOS.Release.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OSEqualsTests {
@@ -19,14 +16,14 @@ public class OSEqualsTests {
 
 	@Test
 	public void winOSEqualsTest() {
-		assertEquals(new WinOS("Windows 8.1", "", WIN_8_1, false),
-				new WinOS("Windows 8.1", "", WIN_8_1, false), IDENTICAL);
+		assertEquals(new WinOS(WIN_8_1, false),
+				new WinOS(WIN_8_1, false), IDENTICAL);
 
-		assertEquals(new WinOS("Windows 7", "", WIN_7, false),
-				new WinOS("Win 7", "", WIN_7, false), LOGICALLY_EQUAL);
+		assertEquals(new WinOS(WIN_7, false),
+				new WinOS(WIN_7, false), LOGICALLY_EQUAL);
 
-		assertNotEquals(new WinOS("Windows 10", "", WIN_10, true),
-				new WinOS("Windows 10", "", WIN_10, false), DIFFERENT);
+		assertNotEquals(new WinOS(WIN_10, true),
+				new WinOS(WIN_10, false), DIFFERENT);
 	}
 
 	@Test
@@ -35,20 +32,20 @@ public class OSEqualsTests {
 
 	@Test
 	public void linuxOSEqualsTest() {
-		assertEquals(new LinuxOS("Ubuntu", "", new HashMap<>(), LinuxOS.Distribution.UBUNTU),
-				new LinuxOS("Ubuntu", "", new HashMap<>(), LinuxOS.Distribution.UBUNTU), IDENTICAL);
+		assertEquals(new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU),
+				new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU), IDENTICAL);
 
-		assertNotEquals(new LinuxOS("Debian", "", new HashMap<>(), LinuxOS.Distribution.DEBIAN),
-				new LinuxOS("Ubuntu", "", new HashMap<>(), LinuxOS.Distribution.UBUNTU), DIFFERENT);
+		assertNotEquals(new LinuxOS(new HashMap<>(), LinuxOS.Distribution.DEBIAN),
+				new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU), DIFFERENT);
 	}
 
 	@Test
 	public void otherOSEqualsTest() {
-		assertEquals(new OtherOS("Sunos", "", OtherOS.OS.SOLARIS),
-				new OtherOS("Sunos", "", OtherOS.OS.SOLARIS), IDENTICAL);
+		assertEquals(new OtherOS(OtherOS.Identity.SOLARIS),
+				new OtherOS(OtherOS.Identity.SOLARIS), IDENTICAL);
 
-		assertNotEquals(new OtherOS("Sunos", "", OtherOS.OS.SOLARIS),
-				new OtherOS("nope", "", OtherOS.OS.UNKNOWN), DIFFERENT);
+		assertNotEquals(new OtherOS(OtherOS.Identity.SOLARIS),
+				new OtherOS(OtherOS.Identity.UNKNOWN), DIFFERENT);
 	}
 
 }

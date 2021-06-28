@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.min.OSFamily;
+
 import java.util.Objects;
 
 /**
@@ -32,24 +34,24 @@ import java.util.Objects;
  */
 public class OtherOS extends OperatingSystem {
 
-	private final OS os;
+	private final Identity identity;
 
-	public OtherOS(String plainName, String plainVersion, OS os) {
-		super(plainName, plainVersion, Family.OTHER);
+	public OtherOS(Identity identity) {
+		super(OSFamily.UNKNOWN);
 
-		this.os = os;
+		this.identity = identity;
 	}
 
-	public OtherOS(String plainName, String plainVersion) {
-		this(plainName, plainVersion, OS.fromString(plainName));
+	public OtherOS(String plainName) {
+		this(Identity.fromString(plainName));
 	}
 
-	public OS getOS() {
-		return os;
+	public Identity getIdentity() {
+		return identity;
 	}
 
 	public boolean equals(OtherOS other) {
-		return Objects.equals(this.getOS(), other.getOS());
+		return Objects.equals(this.getIdentity(), other.getIdentity());
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class OtherOS extends OperatingSystem {
 		return other instanceof OtherOS && this.equals((OtherOS) other);
 	}
 
-	public enum OS {
+	public enum Identity {
 
 		/**
 		 * The Solaris operating system.
@@ -68,7 +70,7 @@ public class OtherOS extends OperatingSystem {
 		 */
 		UNKNOWN;
 
-		public static OS fromString(String name) {
+		public static Identity fromString(String name) {
 			if (name.contains("sunos"))
 				return SOLARIS;
 

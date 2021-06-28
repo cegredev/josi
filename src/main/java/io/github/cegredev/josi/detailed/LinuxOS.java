@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.min.OSFamily;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -39,19 +41,29 @@ import java.util.Objects;
  */
 public class LinuxOS extends OperatingSystem {
 
+	/**
+	 * As loaded from "/etc/os-release".
+	 */
 	private final Map<String, String> osReleaseMap;
 
+	/**
+	 * The exact or next-best Linux distribution.
+	 */
 	private final Distribution distro;
 
-	public LinuxOS(String plainName, String plainVersion, Map<String, String> osRelease, Distribution distro) {
-		super(plainName, plainVersion, Family.LINUX);
+	public LinuxOS(Map<String, String> osRelease, Distribution distro) {
+		super(OSFamily.LINUX);
 
 		this.osReleaseMap = Collections.unmodifiableMap(osRelease);
 		this.distro = distro;
 	}
 
-	public LinuxOS(String plainName, String plainVersion, File osRelease) {
-		super(plainName, plainVersion, Family.LINUX);
+	public LinuxOS(Distribution distro) {
+		this(new HashMap<>(), distro);
+	}
+
+	public LinuxOS(File osRelease) {
+		super(OSFamily.LINUX);
 
 		// If the file does not exist there is nothing more we can achieve. We therefore skip the next segment to
 		// improve performance.
@@ -115,6 +127,14 @@ public class LinuxOS extends OperatingSystem {
 		return other instanceof LinuxOS && this.equals((LinuxOS) other);
 	}
 
+	@Override
+	public String toString() {
+		return "LINUX[" + getDistro() + "]";
+	}
+
+	/**
+	 * @return The exact or next-best Linux distribution.
+	 */
 	public Distribution getDistro() {
 		return distro;
 	}

@@ -23,6 +23,8 @@
  */
 package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.min.OSFamily;
+
 import java.util.Objects;
 
 /**
@@ -33,37 +35,23 @@ import java.util.Objects;
 public abstract class OperatingSystem {
 
 	/**
-	 * The name provided by something like {@code System.getProperty("os.name")}.
-	 */
-	private final String plainName;
-
-	/**
-	 * The version provided by something like {@code System.getProperty("os.version")}.
-	 */
-	private final String plainVersion;
-
-	/**
 	 * The family of the operating system.
 	 */
-	private final Family family;
+	private final OSFamily family;
 
-	protected OperatingSystem(String plainName, String plainVersion, Family family) {
-		this.plainName = plainName;
-		this.plainVersion = plainVersion;
+	protected OperatingSystem(OSFamily family) {
 		this.family = family;
 	}
 
-	public boolean isFamily(Family... families) {
-		for (Family family : families)
+	public boolean isFamily(OSFamily... families) {
+		for (OSFamily family : families)
 			if (family.equals(this.getFamily()))
 				return true;
 		return false;
 	}
 
 	public boolean equals(OperatingSystem other) {
-		return Objects.equals(this.getFamily(), other.getFamily())
-				&& Objects.equals(this.getPlainName(), other.getPlainName())
-				&& Objects.equals(this.getPlainVersion(), other.getPlainVersion());
+		return Objects.equals(this.getFamily(), other.getFamily());
 	}
 
 	@Override
@@ -71,26 +59,13 @@ public abstract class OperatingSystem {
 		return other instanceof OperatingSystem && this.equals((OperatingSystem) other);
 	}
 
-	public Family getFamily() {
+	public OSFamily getFamily() {
 		return family;
-	}
-
-	public String getPlainName() {
-		return plainName;
-	}
-
-	public String getPlainVersion() {
-		return plainVersion;
 	}
 
 	@Override
 	public String toString() {
-		return "OS[family=" + getFamily() + ",name=" + getPlainName() + ",version=" + getPlainVersion() + "]";
+		return "OS[family=" + getFamily() + "]";
 	}
 
-	public enum Family {
-
-		WINDOWS, MAC, LINUX, OTHER
-
-	}
 }

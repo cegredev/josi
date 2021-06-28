@@ -10,7 +10,7 @@ on:
       - '**.md'
       - '**.yml'
       - '**.yaml'
-  # on push/merge to main
+  # on push/merge to main/dev
   push:
     branches:
       - dev

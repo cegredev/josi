@@ -34,7 +34,7 @@ import java.io.File;
  */
 public final class OS {
 
-	private static final OperatingSystem OS = determine(OSFamily.NAME_LOWER,
+	private static final OperatingSystem OS = determine(OSFamily.current(), OSFamily.NAME_LOWER,
 			System.getProperty("os.version"), new File("/etc/os-release"));
 
 	/**
@@ -43,16 +43,28 @@ public final class OS {
 	private OS() {
 	}
 
-	static OperatingSystem determine(String name, String version, File osRelease) {
-		switch (OSFamily.current()) {
+	/**
+	 * Determines the exact operating system. Package-private for tests.
+	 *
+	 * @param family    The family of the operating system (will either be {@link OSFamily#current()} or something else
+	 *                  for testing purposes).
+	 * @param name      The name to determine the operating system from. Expects values in the format of {@code
+	 *                  System.getProperty("os.name")}.
+	 * @param version   The version to determine the operating system from. Expects values in the format of {@code
+	 *                  System.getProperty("os.version")}.
+	 * @param osRelease "/etc/os-release" on Linux systems: contains important information about the OS.
+	 * @return
+	 */
+	static OperatingSystem determine(OSFamily family, String name, String version, File osRelease) {
+		switch (family) {
 			case WINDOWS:
-				return new WinOS(name, version);
+				return new WinOS(name);
 			case MAC:
-				return new MacOS(name, version);
+				return new MacOS(version);
 			case LINUX:
-				return new LinuxOS(name, version, osRelease);
+				return new LinuxOS(osRelease);
 			default:
-				return new OtherOS(name, version);
+				return new OtherOS(name);
 		}
 	}
 
