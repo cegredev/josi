@@ -1,10 +1,13 @@
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
+import io.github.cegredev.josi.detailed.LinuxOS;
+import io.github.cegredev.josi.detailed.OtherOS;
+import io.github.cegredev.josi.detailed.WinOS;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static io.github.cegredev.josi.WinOS.Version.*;
+import static io.github.cegredev.josi.detailed.WinOS.Version.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OSEqualsTests {

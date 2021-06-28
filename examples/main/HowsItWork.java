@@ -28,7 +28,7 @@ import io.github.cegredev.josi.OSFamily;
 public class HowsItWork {
 
 	public static void likeThis() {
-		// The io.github.cegredev.josi.OS enum is the heart of the library. It contains the current operating system:
+		// The io.github.cegredev.josi.detailed.OS enum is the heart of the library. It contains the current operating system:
 		OSFamily os = OSFamily.current();
 		// ...which can be anything from WIN_95 to WIN_10 to any Mac version to a Linux based system. This is as
 		// specific as it gets for this library.

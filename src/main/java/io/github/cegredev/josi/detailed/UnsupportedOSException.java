@@ -21,27 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
 /**
- * Thrown when a given {@link OSFamily} is not supported.
+ * Indicates that something about the given {@link OperatingSystem} was unexpected.
  *
  * @author cegredev
  */
-public class UnsupportedOSFamilyException extends RuntimeException {
+public class UnsupportedOSException extends RuntimeException {
 
-	/**
-	 * @param os The operating system that is not supported.
-	 */
-	public UnsupportedOSFamilyException(OSFamily os) {
-		super("The operating system " + os + " is not supported!");
-	}
-
-	/**
-	 * Uses the {@link OSFamily#current() current} operating system as the OS value.
-	 */
-	public UnsupportedOSFamilyException() {
-		this(OSFamily.current());
+	public UnsupportedOSException(OperatingSystem operatingSystem) {
+		super("Unsupported operating system: " + operatingSystem);
 	}
 
 }

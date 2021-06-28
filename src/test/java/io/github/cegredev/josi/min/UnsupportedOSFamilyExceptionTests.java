@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.min;
 
+import io.github.cegredev.josi.min.OSFamily;
+import io.github.cegredev.josi.min.UnsupportedOSFamilyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * "Tests" {@link UnsupportedOSFamilyException}. This is really just here for the coverage.
  */
-public class UnsupportedOSExceptionTests {
+public class UnsupportedOSFamilyExceptionTests {
 
 	@Test
 	public void testIncludesOSName() {

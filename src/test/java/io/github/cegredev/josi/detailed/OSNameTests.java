@@ -21,14 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
-import org.junit.jupiter.api.Test;
-
-import java.io.File;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static io.github.cegredev.josi.OSFamily.*;
+import io.github.cegredev.josi.min.OSFamily;
 
 /**
  * Tests concerning the recognition of operating systems based on the given information (like name, version, or

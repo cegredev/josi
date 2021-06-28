@@ -21,12 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.min;
 
+import io.github.cegredev.josi.min.OSFamily;
+import io.github.cegredev.josi.min.UnsupportedOSFamilyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static io.github.cegredev.josi.OSFamily.*;
+import static io.github.cegredev.josi.min.OSFamily.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +38,7 @@ import java.util.function.Function;
 /**
  * Tests concerning the different pick-themed utility methods in {@link OSFamily}.
  */
-public class OSPickTests {
+public class OSFamilyPickTests {
 
 	private static final OSFamily[] ALL_FAMILIES = OSFamily.values();
 

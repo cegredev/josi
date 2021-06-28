@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.min;
 
+import io.github.cegredev.josi.min.OSFamily;
+import io.github.cegredev.josi.min.UnsupportedOSFamilyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests concerned with functionality that checks if a given operating system (family) is a specific one.
  */
-public class OSCheckTests {
+public class OSFamilyCheckTests {
 
 	@Test
 	public void testIsOS() {

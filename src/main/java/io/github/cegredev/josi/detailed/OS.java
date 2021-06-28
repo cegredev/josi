@@ -21,60 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
-import java.util.Objects;
+import io.github.cegredev.josi.min.OSFamily;
+
+import java.io.File;
 
 /**
- * Represents any operating system that is not Windows, Mac or Linux based.
+ * Contains the current {@link OperatingSystem}.
  *
  * @author cegredev
  */
-public class OtherOS extends OperatingSystem {
+public final class OS {
 
-	private final OS os;
+	private static final OperatingSystem OS = determine(OSFamily.NAME_LOWER,
+			System.getProperty("os.version"), new File("/etc/os-release"));
 
-	public OtherOS(String plainName, String plainVersion, OS os) {
-		super(plainName, plainVersion, Family.OTHER);
-
-		this.os = os;
+	/**
+	 * No need to instantiate this class.
+	 */
+	private OS() {
 	}
 
-	public OtherOS(String plainName, String plainVersion) {
-		this(plainName, plainVersion, OS.fromString(plainName));
-	}
-
-	public OS getOS() {
-		return os;
-	}
-
-	public boolean equals(OtherOS other) {
-		return Objects.equals(this.getOS(), other.getOS());
-	}
-
-	@Override
-	public boolean equals(OperatingSystem other) {
-		return other instanceof OtherOS && this.equals((OtherOS) other);
-	}
-
-	public enum OS {
-
-		/**
-		 * The Solaris operating system.
-		 */
-		SOLARIS,
-		/**
-		 * An operating system that cannot be classified.
-		 */
-		UNKNOWN;
-
-		public static OS fromString(String name) {
-			if (name.contains("sunos"))
-				return SOLARIS;
-
-			return UNKNOWN;
+	static OperatingSystem determine(String name, String version, File osRelease) {
+		switch (OSFamily.current()) {
+			case WINDOWS:
+				return new WinOS(name, version);
+			case MAC:
+				return new MacOS(name, version);
+			case LINUX:
+				return new LinuxOS(name, version, osRelease);
+			default:
+				return new OtherOS(name, version);
 		}
+	}
 
+	public static OperatingSystem get() {
+		return OS;
 	}
 
 }

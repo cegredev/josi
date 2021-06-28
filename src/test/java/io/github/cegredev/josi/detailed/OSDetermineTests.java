@@ -1,8 +1,10 @@
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
 import org.junit.jupiter.api.Test;
 
-import static io.github.cegredev.josi.WinOS.Version.*;
+import java.util.Locale;
+
+import static io.github.cegredev.josi.detailed.WinOS.Version.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OSDetermineTests {
@@ -21,18 +23,26 @@ public class OSDetermineTests {
 					OS.determine(test.name, test.version, null), MESSAGE);
 	}
 
-	private static class WDT {
+	private static class ODT {
+
+		protected final String name, version;
+
+		private ODT(String name, String version) {
+			this.name = name.toLowerCase(Locale.ROOT).trim();
+			this.version = version;
+		}
+	}
+
+	private static class WDT extends ODT {
 
 		private final boolean server;
 		private final WinOS.Version expectedVersion;
 
-		private final String name, version;
-
 		private WDT(WinOS.Version expectedVersion, boolean server, String name, String version) {
+			super(name, version);
+
 			this.expectedVersion = expectedVersion;
 			this.server = server;
-			this.name = name;
-			this.version = version;
 		}
 
 		private WDT(WinOS.Version expectedVersion, boolean server, String name) {

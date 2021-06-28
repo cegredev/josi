@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
 
 import java.util.Objects;
 
@@ -74,11 +74,6 @@ public class WinOS extends OperatingSystem {
 	@Override
 	public boolean equals(OperatingSystem other) {
 		return other instanceof WinOS && this.equals((WinOS) other);
-	}
-
-	@Override
-	public String toString() {
-		return getVersion() + " " + isServer();
 	}
 
 	public Version getVersion() {

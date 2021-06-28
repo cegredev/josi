@@ -21,17 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi;
+package io.github.cegredev.josi.detailed;
+
+import java.util.Objects;
 
 /**
- * Indicates that something about the given {@link OperatingSystem} was unexpected.
+ * Represents any operating system that is not Windows, Mac or Linux based.
  *
  * @author cegredev
  */
-public class UnsupportedOSException extends RuntimeException {
+public class OtherOS extends OperatingSystem {
 
-	public UnsupportedOSException(OperatingSystem operatingSystem) {
-		super("Unsupported operating system: " + operatingSystem);
+	private final OS os;
+
+	public OtherOS(String plainName, String plainVersion, OS os) {
+		super(plainName, plainVersion, Family.OTHER);
+
+		this.os = os;
+	}
+
+	public OtherOS(String plainName, String plainVersion) {
+		this(plainName, plainVersion, OS.fromString(plainName));
+	}
+
+	public OS getOS() {
+		return os;
+	}
+
+	public boolean equals(OtherOS other) {
+		return Objects.equals(this.getOS(), other.getOS());
+	}
+
+	@Override
+	public boolean equals(OperatingSystem other) {
+		return other instanceof OtherOS && this.equals((OtherOS) other);
+	}
+
+	public enum OS {
+
+		/**
+		 * The Solaris operating system.
+		 */
+		SOLARIS,
+		/**
+		 * An operating system that cannot be classified.
+		 */
+		UNKNOWN;
+
+		public static OS fromString(String name) {
+			if (name.contains("sunos"))
+				return SOLARIS;
+
+			return UNKNOWN;
+		}
+
 	}
 
 }
