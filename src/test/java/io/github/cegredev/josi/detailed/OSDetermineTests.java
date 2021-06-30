@@ -64,8 +64,8 @@ public class OSDetermineTests {
 			"linux_mint"), new LDT(RED_HAT_ENTERPRISE_LINUX, "rhel"), new LDT(CENTOS, "centos"), new LDT(FEDORA,
 			"fedora"), new LDT(ARCH_LINUX, "arch"), new LDT(SUSE, "suse")};
 
-	private static final ODT[] OTHER_TESTS = {new ODT(OtherOS.Identity.UNKNOWN, "does not exist", ""), new ODT(SOLARIS
-			, "sunos", "")};
+	private static final ODT[] OTHER_TESTS = {new ODT(OtherOS.Identity.UNKNOWN, "does not exist"), new ODT(SOLARIS
+			, "sunos")};
 
 	@Test
 	public void testWinDetermine() {
@@ -96,6 +96,12 @@ public class OSDetermineTests {
 	public void testOtherDetermine() {
 		for (ODT test : OTHER_TESTS)
 			test.test();
+	}
+
+	@Test
+	// I'm kind of sorry
+	public void purelyCoverage() {
+		assertNotNull(OS.current(), "OS.current() was null!");
 	}
 
 	private static class WDT extends DetermineTest {
@@ -201,5 +207,6 @@ public class OSDetermineTests {
 		}
 
 	}
+
 
 }

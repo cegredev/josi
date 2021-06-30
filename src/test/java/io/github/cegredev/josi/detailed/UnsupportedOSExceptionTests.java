@@ -23,22 +23,23 @@
  */
 package io.github.cegredev.josi.detailed;
 
-/**
- * Indicates that something about the given {@link OperatingSystem} was unexpected.
- *
- * @author cegredev
- */
-public class UnsupportedOSException extends RuntimeException {
+import org.junit.jupiter.api.Test;
 
-	private final OperatingSystem os;
+import static org.junit.jupiter.api.Assertions.*;
 
-	public UnsupportedOSException(OperatingSystem os) {
-		super("Unsupported operating system: " + os);
+public class UnsupportedOSExceptionTests {
 
-		this.os = os;
+	@Test
+	public void testContainsRightOS() {
+		OperatingSystem unsupported = new MacOS(10, 14);
+
+		assertEquals(unsupported, new UnsupportedOSException(unsupported).getOperatingSystem(),
+				"Exception contained wrong OS!");
 	}
 
-	public OperatingSystem getOperatingSystem() {
-		return os;
+	@Test
+	public void testToString() {
+		assertDoesNotThrow(() -> new UnsupportedOSException(new MacOS(10, 11)).toString());
 	}
+
 }

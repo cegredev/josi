@@ -21,24 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.cegredev.josi.detailed;
+package io.github.cegredev.josi.min;
 
-/**
- * Indicates that something about the given {@link OperatingSystem} was unexpected.
- *
- * @author cegredev
- */
-public class UnsupportedOSException extends RuntimeException {
+import org.junit.jupiter.api.Test;
 
-	private final OperatingSystem os;
+import java.util.Locale;
 
-	public UnsupportedOSException(OperatingSystem os) {
-		super("Unsupported operating system: " + os);
+import static io.github.cegredev.josi.min.OSFamily.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-		this.os = os;
+public class OSFamilyDetermineTests {
+
+	private void test(OSFamily expected, String name) {
+		assertEquals(expected, OSFamily.determine(name.toLowerCase(Locale.ROOT).trim()), "Determined wrong OSFamily!");
 	}
 
-	public OperatingSystem getOperatingSystem() {
-		return os;
+	@Test
+	public void testWin() {
+		test(WINDOWS, "Windows XP");
+		test(WINDOWS, "Windows 7");
+		test(WINDOWS, "Windows 10");
+		test(WINDOWS, "Windows 11");
 	}
+
+	@Test
+	public void testMac() {
+		test(MAC, "Mac");
+		test(MAC, "MacOS X");
+		test(MAC, "Mac OS X");
+	}
+
+	@Test
+	public void testLinux() {
+		test(LINUX, "Linux");
+	}
+
+	@Test
+	public void testUnknown() {
+		test(UNKNOWN, "Solaris");
+		test(UNKNOWN, "does not exist");
+	}
+
 }

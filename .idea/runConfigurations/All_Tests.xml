@@ -3,7 +3,7 @@
     <module name="josi" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="io.github.cegredev.josi.constraints.*" />
+        <option name="PATTERN" value="io.github.cegredev.josi.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

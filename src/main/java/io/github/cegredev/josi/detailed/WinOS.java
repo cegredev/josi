@@ -42,6 +42,10 @@ public class WinOS extends OperatingSystem {
 		this.server = server;
 	}
 
+	public WinOS(Release release) {
+		this(release, false);
+	}
+
 	public WinOS(String plainName) {
 		// TODO: Use version here instead of name. In order to that we'd need a list of what os.version
 		// is on the different Windows versions to be completely sure.
