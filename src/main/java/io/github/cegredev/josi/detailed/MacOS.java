@@ -39,15 +39,11 @@ public class MacOS extends OperatingSystem {
 	private final int minor;
 
 	public MacOS(int major, int minor) {
-		super(OSFamily.MAC);
-
 		this.major = major;
 		this.minor = minor;
 	}
 
 	public MacOS(String plainVersion) {
-		super(OSFamily.MAC);
-
 		int major = UNKNOWN_MAJOR, minor = 0;
 
 		char sep = '.';
@@ -101,6 +97,11 @@ public class MacOS extends OperatingSystem {
 
 	public int getMajor() {
 		return major;
+	}
+
+	@Override
+	public final OSFamily getFamily() {
+		return OSFamily.MAC;
 	}
 
 }

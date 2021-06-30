@@ -38,15 +38,11 @@ public class WinOS extends OperatingSystem {
 	private final Release release;
 
 	public WinOS(Release release, boolean server) {
-		super(OSFamily.WINDOWS);
-
 		this.release = release;
 		this.server = server;
 	}
 
 	public WinOS(String plainName) {
-		super(OSFamily.WINDOWS);
-
 		// TODO: Use version here instead of name. In order to that we'd need a list of what os.version
 		// is on the different Windows versions to be completely sure.
 		this.release = Release.fromString(plainName);
@@ -80,6 +76,11 @@ public class WinOS extends OperatingSystem {
 
 	public boolean isServer() {
 		return server;
+	}
+
+	@Override
+	public final OSFamily getFamily() {
+		return OSFamily.WINDOWS;
 	}
 
 	/**

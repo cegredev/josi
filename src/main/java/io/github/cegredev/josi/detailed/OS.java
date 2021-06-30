@@ -68,7 +68,7 @@ public final class OS {
 		}
 	}
 
-	public static OperatingSystem get() {
+	public static OperatingSystem current() {
 		return OS;
 	}
 

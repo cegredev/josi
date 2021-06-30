@@ -37,8 +37,6 @@ public class OtherOS extends OperatingSystem {
 	private final Identity identity;
 
 	public OtherOS(Identity identity) {
-		super(OSFamily.UNKNOWN);
-
 		this.identity = identity;
 	}
 
@@ -57,6 +55,11 @@ public class OtherOS extends OperatingSystem {
 	@Override
 	public boolean equals(OperatingSystem other) {
 		return other instanceof OtherOS && this.equals((OtherOS) other);
+	}
+
+	@Override
+	public final OSFamily getFamily() {
+		return OSFamily.UNKNOWN;
 	}
 
 	public enum Identity {

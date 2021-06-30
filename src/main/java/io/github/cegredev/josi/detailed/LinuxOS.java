@@ -52,8 +52,6 @@ public class LinuxOS extends OperatingSystem {
 	private final Distribution distro;
 
 	public LinuxOS(Map<String, String> osRelease, Distribution distro) {
-		super(OSFamily.LINUX);
-
 		this.osReleaseMap = Collections.unmodifiableMap(osRelease);
 		this.distro = distro;
 	}
@@ -63,8 +61,6 @@ public class LinuxOS extends OperatingSystem {
 	}
 
 	public LinuxOS(File osRelease) {
-		super(OSFamily.LINUX);
-
 		// If the file does not exist there is nothing more we can achieve. We therefore skip the next segment to
 		// improve performance.
 		if (osRelease.exists()) {
@@ -137,6 +133,11 @@ public class LinuxOS extends OperatingSystem {
 	 */
 	public Distribution getDistro() {
 		return distro;
+	}
+
+	@Override
+	public final OSFamily getFamily() {
+		return OSFamily.LINUX;
 	}
 
 	/**

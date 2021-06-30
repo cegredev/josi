@@ -28,20 +28,18 @@ import io.github.cegredev.josi.min.OSFamily;
 import java.util.Objects;
 
 /**
- * Represents a specific instance of an operating system with access to every last bit of information.
+ * Represents a specific instance of an operating system.
  *
  * @author cegredev
  */
 public abstract class OperatingSystem {
 
 	/**
-	 * The family of the operating system.
+	 * @return The family of the operating system.
 	 */
-	private final OSFamily family;
-
-	protected OperatingSystem(OSFamily family) {
-		this.family = family;
-	}
+	// Note: This is an abstract method instead of a getter to avoid having
+	// to pass each instance of a subclass a reference to the right family
+	public abstract OSFamily getFamily();
 
 	public boolean isFamily(OSFamily... families) {
 		for (OSFamily family : families)
@@ -57,10 +55,6 @@ public abstract class OperatingSystem {
 	@Override
 	public boolean equals(Object other) {
 		return other instanceof OperatingSystem && this.equals((OperatingSystem) other);
-	}
-
-	public OSFamily getFamily() {
-		return family;
 	}
 
 	@Override
