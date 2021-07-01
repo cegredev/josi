@@ -27,6 +27,7 @@ import io.github.cegredev.josi.min.OSFamily;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import static io.github.cegredev.josi.detailed.OtherOS.Identity.*;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OSDetermineTests {
 
 	private static final String MESSAGE = "Did not determine correct operating system!";
-	private static final String OS_RELEASES_PATH = "src/test/resources/etc/os-releases/";
+	private static final Path OS_RELEASES_PATH = Path.of("test/resources/etc/os-releases/");
 
 	private static final WDT[] WIN_TESTS = {new WDT(WinOS.Release.UNKNOWN, "1.0"),
 			new WDT(WIN_95, "95"), new WDT(WIN_98, "98"), new WDT(WIN_XP, "XP"),
@@ -64,8 +65,8 @@ public class OSDetermineTests {
 			"linux_mint"), new LDT(RED_HAT_ENTERPRISE_LINUX, "rhel"), new LDT(CENTOS, "centos"), new LDT(FEDORA,
 			"fedora"), new LDT(ARCH_LINUX, "arch"), new LDT(SUSE, "suse")};
 
-	private static final ODT[] OTHER_TESTS = {new ODT(OtherOS.Identity.UNKNOWN, "does not exist"), new ODT(SOLARIS
-			, "sunos")};
+	private static final ODT[] OTHER_TESTS = {new ODT(OtherOS.Identity.UNKNOWN, "does not exist"),
+			new ODT(SOLARIS, "sunos")};
 
 	@Test
 	public void testWinDetermine() {
@@ -154,7 +155,7 @@ public class OSDetermineTests {
 		public void test() {
 			// Ideally this would be solved by checking when the file does not exist in the loop, but... No.
 			for (int i = 0; i < 10000; i++) {
-				File file = new File(OS_RELEASES_PATH + osReleasePrefix + i + ".txt");
+				File file = OS_RELEASES_PATH.resolve(osReleasePrefix + i + ".txt").toFile();
 				if (i > 0 && !file.exists())
 					break;
 

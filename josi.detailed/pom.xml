@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>josi</artifactId>
+        <groupId>io.github.cegredev.josi</groupId>
+        <version>0.4.1</version>
+    </parent>
+
+    <artifactId>josi.detailed</artifactId>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.cegredev.josi</groupId>
+            <artifactId>josi.min</artifactId>
+            <version>0.4.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>main/java</sourceDirectory>
+        <testSourceDirectory>test/java</testSourceDirectory>
+    </build>
+
+</project>
