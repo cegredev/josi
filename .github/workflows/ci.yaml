@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         # Baseline support, Current LTS, Current GA, Current EA
-        java: [8, 11, 16, 17-ea]
+        java: [11, 16, 17-ea]
         # Tests are not OS-dependent, if later tests require OS, expand this
         os: [ubuntu-latest]
       fail-fast: false
