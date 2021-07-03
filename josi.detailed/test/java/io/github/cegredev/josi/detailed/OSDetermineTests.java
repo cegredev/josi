@@ -27,6 +27,7 @@ import io.github.cegredev.josi.min.OSFamily;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OSDetermineTests {
 
-	public static final Path OS_RELEASES_PATH = Path.of("josi.detailed/test/resources/etc/os-releases/");
+	public static final Path OS_RELEASES_PATH;
 
 	private static final String MESSAGE = "Did not determine correct operating system!";
 
@@ -60,7 +61,6 @@ public class OSDetermineTests {
 			new MDT(11, 0, " OS X", "11.0"), new MDT(11, 2, " OS X", "11.2.1"),
 			new MDT(12, 0, " OS X", "12.0"), new MDT(12, 0, " OS X", "10.17")};
 
-
 	private static final LDT[] LINUX_TESTS = {new LDT(LinuxOS.Distribution.UNKNOWN, "unknown"),
 			new LDT(DEBIAN, "debian"), new LDT(UBUNTU, "ubuntu"), new LDT(GENTOO, "gentoo"), new LDT(LINUX_MINT,
 			"linux_mint"), new LDT(RED_HAT_ENTERPRISE_LINUX, "rhel"), new LDT(CENTOS, "centos"), new LDT(FEDORA,
@@ -68,6 +68,14 @@ public class OSDetermineTests {
 
 	private static final ODT[] OTHER_TESTS = {new ODT(OtherOS.Identity.UNKNOWN, "does not exist"),
 			new ODT(SOLARIS, "sunos")};
+
+	static {
+		try {
+			OS_RELEASES_PATH = Path.of(OSDetermineTests.class.getResource("/etc/os-releases/").toURI());
+		} catch (URISyntaxException e) {
+			throw new RuntimeException();
+		}
+	}
 
 	@Test
 	public void testWinDetermine() {
