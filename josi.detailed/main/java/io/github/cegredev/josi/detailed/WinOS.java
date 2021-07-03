@@ -55,6 +55,10 @@ public class WinOS extends OperatingSystem {
 		this.server = plainName.contains("server");
 	}
 
+	public boolean isAtLeast(Release other) {
+		return other.compareTo(this.getRelease()) <= 0;
+	}
+
 	/**
 	 * @param other The {@link WinOS} to check against.
 	 * @return Whether the operating systems are equal to each other.

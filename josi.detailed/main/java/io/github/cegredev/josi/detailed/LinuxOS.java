@@ -29,10 +29,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a Linux based operating system.
@@ -51,18 +48,20 @@ public class LinuxOS extends OperatingSystem {
 	 */
 	private final Distribution distro;
 
-	public LinuxOS(Map<String, String> osRelease, Distribution distro) {
-		this.osReleaseMap = Collections.unmodifiableMap(osRelease);
+	private final List<Distribution> parents;
+
+	public LinuxOS(Map<String, String> osRelease, Distribution distro, List<Distribution> parents) {
+		this.osReleaseMap = osRelease;
 		this.distro = distro;
+		this.parents = parents;
 	}
 
 	public LinuxOS(Distribution distro) {
-		this(new HashMap<>(), distro);
+		this(Map.of(), distro, List.of());
 	}
 
 	public LinuxOS(File osRelease) {
-		// If the file does not exist there is nothing more we can achieve. We therefore skip the next segment to
-		// improve performance.
+		// If the file does not exist there is nothing more we can achieve.
 		if (osRelease.exists()) {
 			Map<String, String> osReleaseMap = new HashMap<>();
 
@@ -101,16 +100,29 @@ public class LinuxOS extends OperatingSystem {
 			if (id != null)
 				distro = Distribution.fromID(id);
 
-			if (distro == Distribution.UNKNOWN && idLike != null)
-				for (String parentID : idLike.split(" "))
-					if ((distro = Distribution.fromID(parentID)) != Distribution.UNKNOWN)
-						break;
+			List<Distribution> parents = new ArrayList<>();
+			if (idLike != null)
+				for (String parentID : idLike.split(" ")) {
+					Distribution parentDistro = Distribution.fromID(parentID);
+					parents.add(parentDistro);
+
+					if (distro == Distribution.UNKNOWN && parentDistro != Distribution.UNKNOWN)
+						distro = parentDistro;
+				}
 
 			this.distro = distro;
+			this.parents = Collections.unmodifiableList(parents);
 		} else {
+			System.err.println("\"/etc/os-release\" file does not exist at \"" + osRelease.getAbsolutePath() + "\"!");
+
 			this.osReleaseMap = Collections.unmodifiableMap(new HashMap<>());
 			this.distro = Distribution.UNKNOWN;
+			this.parents = List.of();
 		}
+	}
+
+	public boolean isAtLeast(Distribution parent) {
+		return parent.equals(this.getDistro()) || getParents().contains(parent);
 	}
 
 	public boolean equals(LinuxOS other) {
@@ -145,6 +157,10 @@ public class LinuxOS extends OperatingSystem {
 	 */
 	public Map<String, String> getOsReleaseMap() {
 		return osReleaseMap;
+	}
+
+	public List<Distribution> getParents() {
+		return parents;
 	}
 
 	public enum Distribution {

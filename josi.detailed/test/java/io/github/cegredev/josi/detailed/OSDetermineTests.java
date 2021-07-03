@@ -37,8 +37,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OSDetermineTests {
 
+	public static final Path OS_RELEASES_PATH = Path.of("josi.detailed/test/resources/etc/os-releases/");
+
 	private static final String MESSAGE = "Did not determine correct operating system!";
-	private static final Path OS_RELEASES_PATH = Path.of("test/resources/etc/os-releases/");
 
 	private static final WDT[] WIN_TESTS = {new WDT(WinOS.Release.UNKNOWN, "1.0"),
 			new WDT(WIN_95, "95"), new WDT(WIN_98, "98"), new WDT(WIN_XP, "XP"),
@@ -90,7 +91,7 @@ public class OSDetermineTests {
 
 		// Special case file is broken:
 		assertEquals(new LinuxOS(LinuxOS.Distribution.UNKNOWN), OS.determine(OSFamily.LINUX, "Linux", "",
-				new File(OS_RELEASES_PATH + "broken.txt")), MESSAGE);
+				OS_RELEASES_PATH.resolve("broken.txt").toFile()), MESSAGE);
 	}
 
 	@Test

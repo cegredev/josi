@@ -55,11 +55,11 @@ public class OSEqualsTests {
 
 	@Test
 	public void linuxOSEqualsTest() {
-		assertEquals(new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU),
-				new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU), IDENTICAL);
+		assertEquals(new LinuxOS(LinuxOS.Distribution.UBUNTU),
+				new LinuxOS(LinuxOS.Distribution.UBUNTU), IDENTICAL);
 
-		assertNotEquals(new LinuxOS(new HashMap<>(), LinuxOS.Distribution.DEBIAN),
-				new LinuxOS(new HashMap<>(), LinuxOS.Distribution.UBUNTU), DIFFERENT);
+		assertNotEquals(new LinuxOS(LinuxOS.Distribution.DEBIAN),
+				new LinuxOS(LinuxOS.Distribution.UBUNTU), DIFFERENT);
 	}
 
 	@Test

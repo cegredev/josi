@@ -10,5 +10,10 @@
         <module name="josi.detailed" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="josi" target="11" />
+      <module name="josi.detailed" target="11" />
+      <module name="josi.min" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

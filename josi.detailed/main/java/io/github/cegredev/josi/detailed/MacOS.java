@@ -64,16 +64,25 @@ public class MacOS extends OperatingSystem {
 		// Sometimes, MacOS versions 11 and 12 (as of June 2021) are reported as 10.16/10.17
 		// by System.getProperty("os.name") which is why we have to do this to achieve the official versioning
 		if (major == 10) {
-			int surplus = minor - 15;
+			int overhead = minor - 15;
 
-			if (surplus > 0) {
+			if (overhead > 0) {
 				minor = 0;
-				major += surplus;
+				major += overhead;
 			}
 		}
 
 		this.major = major;
 		this.minor = minor;
+	}
+
+	public boolean isAtLeast(int otherMajor, int otherMinor) {
+		int major = getMajor(), minor = getMinor();
+		return major > otherMajor || (major == otherMajor && minor >= otherMinor);
+	}
+
+	public boolean isAtLeast(int otherMajor) {
+		return getMajor() >= otherMajor;
 	}
 
 	public boolean equals(MacOS other) {
