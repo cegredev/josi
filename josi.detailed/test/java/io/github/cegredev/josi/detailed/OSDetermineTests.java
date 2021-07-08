@@ -70,11 +70,20 @@ public class OSDetermineTests {
 			new ODT(SOLARIS, "sunos")};
 
 	static {
-		try {
-			OS_RELEASES_PATH = Path.of(OSDetermineTests.class.getResource("/etc/os-releases/").toURI());
-		} catch (URISyntaxException e) {
-			throw new RuntimeException();
-		}
+		// This determines the path of the .../test/resources/etc/os-releases directory, *because*:
+		// The working directories are different when running tests via an IntelliJ config or "mvn test"
+		// and since for development the IntelliJ-way is just much nicer, but for CI the maven goal is
+		// used, we have to cover both. It's ugly, it's hacky, it's bound to break, but here it is.
+		var modulePrefix = Path.of("josi.detailed");
+		var path = Path.of("test/resources/etc/os-releases");
+		if (!Path.of("").toAbsolutePath().endsWith(modulePrefix))
+			path = modulePrefix.resolve(path);
+		OS_RELEASES_PATH = path.toAbsolutePath();
+
+		System.out.println("In case CI still isn't working, here some info:");
+		System.out.println("Working dir: " + Path.of("").toAbsolutePath());
+		System.out.println("path variable: " + path);
+		System.out.println("OS_RELEASES_PATH variable: " + OS_RELEASES_PATH);
 	}
 
 	@Test
