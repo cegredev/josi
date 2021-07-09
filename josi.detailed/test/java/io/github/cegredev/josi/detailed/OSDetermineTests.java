@@ -79,11 +79,6 @@ public class OSDetermineTests {
 		if (!Path.of("").toAbsolutePath().endsWith(modulePrefix))
 			path = modulePrefix.resolve(path);
 		OS_RELEASES_PATH = path.toAbsolutePath();
-
-		System.out.println("In case CI still isn't working, here some info:");
-		System.out.println("Working dir: " + Path.of("").toAbsolutePath());
-		System.out.println("path variable: " + path);
-		System.out.println("OS_RELEASES_PATH variable: " + OS_RELEASES_PATH);
 	}
 
 	@Test
