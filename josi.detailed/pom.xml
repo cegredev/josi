@@ -6,7 +6,7 @@
     <parent>
         <artifactId>josi</artifactId>
         <groupId>io.github.cegredev.josi</groupId>
-        <version>0.4.1</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>josi.detailed</artifactId>
@@ -19,13 +19,24 @@
         <dependency>
             <groupId>io.github.cegredev.josi</groupId>
             <artifactId>josi.min</artifactId>
-            <version>0.4.1</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>main/resources</directory>
+            </resource>
+        </resources>
+
         <testSourceDirectory>test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>test/resources</directory>
+            </testResource>
+        </testResources>
     </build>
 
 </project>

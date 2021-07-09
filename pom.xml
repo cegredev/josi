@@ -6,7 +6,7 @@
 
     <groupId>io.github.cegredev.josi</groupId>
     <artifactId>josi</artifactId>
-    <version>0.4.1</version>
+    <version>${revision}</version>
     <modules>
         <module>josi.min</module>
         <module>josi.detailed</module>
@@ -33,6 +33,8 @@
     </scm>
 
     <properties>
+        <revision>0.4.1</revision>
+
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
