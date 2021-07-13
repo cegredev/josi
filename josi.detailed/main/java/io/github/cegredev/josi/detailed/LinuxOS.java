@@ -32,14 +32,15 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Represents a Linux based operating system.
+ * Represents a Linux based operating system using the {@link Distribution} enum. It gets this information from
+ * "/etc/os-release" or any equivalent file.
  *
  * @author cegredev
  */
 public class LinuxOS extends OperatingSystem {
 
 	/**
-	 * As loaded from "/etc/os-release".
+	 * As loaded from "/etc/os-release" or any equivalent file.
 	 */
 	private final Map<String, String> osReleaseMap;
 
@@ -48,17 +49,29 @@ public class LinuxOS extends OperatingSystem {
 	 */
 	private final Distribution distro;
 
+	/**
+	 * @param osRelease Contains key value pairs with additional information about this OS.
+	 * @param distro    The distribution of Linux representing this OS.
+	 */
 	public LinuxOS(Map<String, String> osRelease, Distribution distro) {
 		this.osReleaseMap = osRelease;
 		this.distro = distro;
 	}
 
+	/**
+	 * @param distro The distribution of Linux representing this OS.
+	 */
 	public LinuxOS(Distribution distro) {
 		this(Map.of(), distro);
 	}
 
+	/**
+	 * Determines the distribution and contents of {@link #getOsReleaseMap()}
+	 *
+	 * @param osRelease The file to read all important OS information from.
+	 */
 	public LinuxOS(File osRelease) {
-		// If the file does not exist there is nothing more we can achieve.
+		// If the file does not exist there is nothing we can do
 		if (osRelease.exists()) {
 			Map<String, String> osReleaseMap = new HashMap<>();
 
@@ -67,7 +80,7 @@ public class LinuxOS extends OperatingSystem {
 				while ((line = reader.readLine()) != null) {
 					int split = line.indexOf('=');
 
-					// Broken os-release file, but other lines might still be correct
+					// Broken os-release file. Other lines might still be correct though
 					if (split <= -1)
 						continue;
 
@@ -104,7 +117,7 @@ public class LinuxOS extends OperatingSystem {
 
 			this.distro = distro;
 		} else {
-			System.err.println("\"/etc/os-release\" file does not exist at \"" + osRelease.getAbsolutePath() + "\"!");
+			System.err.println("The given os-release file \"" + osRelease.getAbsolutePath() + "\" does not exist!");
 
 			this.osReleaseMap = Collections.unmodifiableMap(new HashMap<>());
 			this.distro = Distribution.UNKNOWN;
@@ -119,6 +132,10 @@ public class LinuxOS extends OperatingSystem {
 //		return // "parent" is parent distribution of this.getDistro()
 //	}
 
+	/**
+	 * @param other The instance to compare to.
+	 * @return Whether the distributions of the two objects mqtch.
+	 */
 	public boolean equals(LinuxOS other) {
 		// TODO: Figure out what of osReleaseMap to include here
 		return Objects.equals(this.getDistro(), other.getDistro());
@@ -153,6 +170,9 @@ public class LinuxOS extends OperatingSystem {
 		return osReleaseMap;
 	}
 
+	/**
+	 * A list of different Linux distributions such as Ubuntu, Gentoo or Fedora.
+	 */
 	public enum Distribution {
 
 		DEBIAN, UBUNTU, GENTOO, LINUX_MINT, RED_HAT_ENTERPRISE_LINUX, CENTOS, FEDORA, ARCH_LINUX,
@@ -165,6 +185,10 @@ public class LinuxOS extends OperatingSystem {
 		 */
 		UNKNOWN;
 
+		/**
+		 * @param id The ID of the distribution as found in "/etc/os-release".
+		 * @return A {@link Distribution} matching the given ID ({@code null} if none is found).
+		 */
 		public static Distribution fromID(String id) {
 			switch (id) {
 				// All the OSs up to (including) SUSE can be found in this GitHub repo or its forks:

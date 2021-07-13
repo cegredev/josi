@@ -32,8 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MacOSTests {
 
-	private static final String IS_AT_LEAST_MSG = "isAtLeast did not return the correct result!";
-
 	private static void testDetermineHelper(int major, int minor, String nameExtension, String version) {
 		assertEquals(new MacOS(major, minor),
 				OS.determine(OSFamily.MAC, "mac" + nameExtension.toLowerCase(Locale.ROOT), version, null),
